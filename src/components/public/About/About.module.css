@@ -100,11 +100,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary),
-    var(--accent-secondary)
-  );
+  background: var(--accent-primary);
   border-radius: 16px;
 }
 
@@ -177,10 +173,7 @@
 .statNumber {
   font-size: 2rem;
   font-weight: 700;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-primary);
 }
 
 .statLabel {

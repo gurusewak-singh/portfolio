@@ -13,7 +13,7 @@ export function LoadingScreen3D({ onLoadingComplete }: LoadingScreenProps) {
   useEffect(() => {
     const duration = 2000;
     const startTime = Date.now();
-    
+
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
       const newProgress = Math.min((elapsed / duration) * 100, 100);
@@ -59,7 +59,7 @@ export function LoadingScreen3D({ onLoadingComplete }: LoadingScreenProps) {
         }}
       >
         <span style={{ color: "#ffffff" }}>Gurusewak</span>
-        <span style={{ color: "#a855f7" }}>.in</span>
+        <span style={{ color: "#7c7cf8" }}>.in</span>
       </motion.h1>
 
       {/* Simple loading bar */}
@@ -70,17 +70,17 @@ export function LoadingScreen3D({ onLoadingComplete }: LoadingScreenProps) {
         style={{
           marginTop: "2rem",
           width: "120px",
-          height: "2px",
-          background: "rgba(255, 255, 255, 0.1)",
-          borderRadius: "1px",
+          height: "4px",
+          background: "rgba(124, 124, 248, 0.15)",
+          borderRadius: "2px",
           overflow: "hidden",
         }}
       >
         <motion.div
           style={{
             height: "100%",
-            background: "#a855f7",
-            borderRadius: "1px",
+            background: "#7c7cf8",
+            borderRadius: "2px",
           }}
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}

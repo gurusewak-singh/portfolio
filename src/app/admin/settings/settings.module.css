@@ -4,76 +4,9 @@
   background: var(--background);
 }
 
-.sidebar {
-  width: 250px;
-  background: var(--card-bg);
-  border-right: 1px solid var(--border);
-  padding: 2rem 0;
-  position: fixed;
-  height: 100vh;
-  overflow-y: auto;
-}
-
-.sidebarHeader {
-  padding: 0 1.5rem 2rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 1rem;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-decoration: none;
-}
-
-.logoText {
-  background: linear-gradient(135deg, #818cf8, #a78bfa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.logoDot {
-  color: #818cf8;
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0 0.75rem;
-}
-
-.navItem {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s;
-  font-weight: 500;
-}
-
-.navItem:hover {
-  background: rgba(129, 140, 248, 0.1);
-  color: var(--text-primary);
-}
-
-.navItem.active {
-  background: linear-gradient(
-    135deg,
-    rgba(129, 140, 248, 0.2),
-    rgba(167, 139, 250, 0.2)
-  );
-  color: #a78bfa;
-}
-
 .main {
   flex: 1;
-  margin-left: 250px;
+  margin-left: 260px;
   padding: 2rem;
 }
 
@@ -300,44 +233,18 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .main {
+    margin-left: 72px;
+    padding: 1.5rem;
+  }
+
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    border-right: none;
-    border-top: 1px solid var(--border);
-    padding: 0;
-    z-index: 1000;
-    display: flex;
-    background: var(--card-bg);
-  }
-
-  .sidebarHeader {
-    display: none;
-  }
-
-  .nav {
-    flex-direction: row;
-    flex: 1;
-    padding: 8px 4px;
-    overflow-x: auto;
-    gap: 2px;
-    justify-content: space-around;
-  }
-
-  .navItem {
-    padding: 8px 10px;
-    font-size: 0.7rem;
-    text-align: center;
-    min-width: 60px;
-  }
-
   .main {
     margin-left: 0;
     padding: 16px;

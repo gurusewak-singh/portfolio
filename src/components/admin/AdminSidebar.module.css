@@ -1,0 +1,211 @@
+.sidebar {
+  width: 260px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.sidebarHeader {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.logoText {
+  color: var(--text-primary);
+}
+
+.logoDot {
+  color: var(--accent-primary);
+}
+
+.adminBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: var(--accent-primary);
+  color: white;
+  border-radius: 6px;
+}
+
+.nav {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.navItem:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.navItem.active {
+  background: rgba(124, 124, 248, 0.1);
+  color: var(--accent-primary);
+}
+
+.navLabel {
+  /* Shown by default on desktop */
+}
+
+.sidebarFooter {
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.signOutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  transition: all 0.3s ease;
+}
+
+.signOutBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+}
+
+/* Tablet: collapse to icon-only sidebar */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 72px;
+  }
+
+  .sidebarHeader {
+    justify-content: center;
+    padding: 16px 8px;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .adminBadge {
+    display: none;
+  }
+
+  .nav {
+    padding: 12px 8px;
+  }
+
+  .navItem {
+    justify-content: center;
+    padding: 12px 8px;
+    gap: 0;
+  }
+
+  .navLabel {
+    display: none;
+  }
+
+  .sidebarFooter {
+    padding: 12px 8px;
+  }
+
+  .signOutBtn {
+    justify-content: center;
+    padding: 12px 8px;
+    gap: 0;
+  }
+}
+
+/* Mobile: bottom tab bar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-right: none;
+    border-top: 1px solid var(--border-color);
+    z-index: 1000;
+    background: var(--bg-secondary);
+  }
+
+  .sidebarHeader {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex: 1;
+    padding: 6px 4px;
+    overflow-x: auto;
+    gap: 0;
+    justify-content: space-around;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navItem {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 6px;
+    font-size: 0.625rem;
+    min-width: 52px;
+    gap: 3px;
+    border-radius: 8px;
+  }
+
+  .navItem svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .navLabel {
+    display: block;
+    font-size: 0.6rem;
+    line-height: 1.2;
+  }
+
+  .sidebarFooter {
+    display: none;
+  }
+}

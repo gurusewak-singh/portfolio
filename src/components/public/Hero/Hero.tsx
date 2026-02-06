@@ -6,9 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import styles from "./Hero.module.css";
-import FloatingElement, {
-  FloatingOrb,
-} from "@/components/animations/FloatingElement";
+import FloatingElement from "@/components/animations/FloatingElement";
 import MagneticButton from "@/components/animations/MagneticButton";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
@@ -32,26 +30,8 @@ export default function Hero() {
   const [heroPhoto, setHeroPhoto] = useState<string | null>(null);
 
   // Theme-aware overlay colors
-  const overlayGradient =
-    theme === "light"
-      ? "linear-gradient(to bottom, rgba(248,250,252,0.8), rgba(241,245,249,0.85))"
-      : "linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.8))";
-
-  // Theme-aware orb colors
-  const orbColors = {
-    primary:
-      theme === "light"
-        ? "rgba(99, 102, 241, 0.25)"
-        : "rgba(99, 102, 241, 0.4)",
-    secondary:
-      theme === "light"
-        ? "rgba(139, 92, 246, 0.2)"
-        : "rgba(139, 92, 246, 0.35)",
-    tertiary:
-      theme === "light"
-        ? "rgba(168, 85, 247, 0.15)"
-        : "rgba(168, 85, 247, 0.25)",
-  };
+  const overlayColor =
+    theme === "light" ? "rgba(248,250,252,0.6)" : "rgba(0,0,0,0.55)";
 
   // Fetch hero settings
   useEffect(() => {
@@ -104,49 +84,30 @@ export default function Hero() {
   }, [displayText, isDeleting, currentRole]);
 
   return (
-    <section
-      className={styles.hero}
-      style={
-        heroBackground
-          ? {
-              backgroundImage: `${overlayGradient}, url(${heroBackground})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }
-          : undefined
-      }
-    >
-      <div className={styles.background}>
-        {/* 3D Scene Background */}
-        <Hero3DScene />
+    <section className={styles.hero}>
+      {/* Background image layer */}
+      {heroBackground && (
+        <div
+          className={styles.heroBackgroundImage}
+          style={{
+            backgroundImage: `url(${heroBackground})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
 
-        {/* Animated floating orbs */}
-        <FloatingOrb
-          className={styles.gradientOrb1}
-          size={400}
-          color={orbColors.primary}
-          duration={25}
-          xRange={80}
-          yRange={40}
+      {/* Overlay on top of background image */}
+      {heroBackground && (
+        <div
+          className={styles.heroOverlay}
+          style={{ backgroundColor: overlayColor }}
         />
-        <FloatingOrb
-          className={styles.gradientOrb2}
-          size={350}
-          color={orbColors.secondary}
-          duration={20}
-          delay={2}
-          xRange={60}
-          yRange={50}
-        />
-        <FloatingOrb
-          size={200}
-          color={orbColors.tertiary}
-          duration={15}
-          delay={4}
-          xRange={100}
-          yRange={60}
-        />
-        <div className={styles.grid}></div>
+      )}
+
+      <div className={styles.background}>
+        {/* 3D Scene Background (grid pattern) */}
+        <Hero3DScene />
       </div>
 
       <div className={styles.container}>
@@ -219,7 +180,7 @@ export default function Hero() {
                 className={styles.primaryBtn}
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(99, 102, 241, 0.4)",
+                  boxShadow: "0 20px 40px rgba(124, 124, 248, 0.4)",
                 }}
                 whileTap={{ scale: 0.95 }}
               >

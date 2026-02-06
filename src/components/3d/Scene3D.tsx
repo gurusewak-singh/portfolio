@@ -284,82 +284,16 @@ function HeroSceneContent({
     <>
       <FrameLimiter fps={quality === "low" ? 24 : 30} />
 
-      {/* Lighting - brighter for light mode */}
+      {/* Lighting */}
       <ambientLight intensity={colors.ambient} />
       <directionalLight
         position={[10, 10, 5]}
         intensity={theme === "light" ? 1 : 0.8}
         color="#ffffff"
       />
-      <pointLight
-        position={[-5, 5, -5]}
-        intensity={theme === "light" ? 0.3 : 0.5}
-        color={colors.sphere}
-      />
-      <pointLight
-        position={[5, -5, 5]}
-        intensity={theme === "light" ? 0.2 : 0.3}
-        color={colors.crystal}
-      />
-
-      {/* Main floating elements */}
-      <FloatingCrystal
-        position={[3.5, 0.5, 0]}
-        color={colors.crystal}
-        size={0.8}
-      />
-      <AnimatedTorusKnot
-        position={[-3, 0, -2]}
-        color={colors.torusKnot}
-        size={0.6}
-      />
-      <MorphingSphere
-        position={[2, -1.5, -3]}
-        color={colors.sphere}
-        size={0.7}
-      />
-
-      {/* Orbital rings around hero area */}
-      <OrbitalRings position={[3, 0, -1]} color={colors.orbital} size={1.5} />
-
-      {/* Smaller floating crystals */}
-      {quality !== "low" && (
-        <>
-          <FloatingCrystal
-            position={[-4, 2, -2]}
-            color={colors.sphere}
-            size={0.4}
-            rotationSpeed={-1}
-          />
-          <FloatingCrystal
-            position={[5, -1, -4]}
-            color={colors.torusKnot}
-            size={0.3}
-            rotationSpeed={1.5}
-          />
-          <FloatingCrystal
-            position={[-2, -2, -3]}
-            color={colors.sphere}
-            size={0.35}
-            rotationSpeed={-0.8}
-          />
-        </>
-      )}
-
-      {/* Sparkle particles */}
-      <Sparkles
-        count={particleCount}
-        scale={15}
-        size={2}
-        speed={0.3}
-        color={colors.sparkles}
-        opacity={colors.sparkleOpacity}
-      />
 
       {/* Grid floor */}
-      {quality !== "low" && (
-        <GridFloor color={colors.grid} opacity={colors.gridOpacity} />
-      )}
+      <GridFloor color={colors.grid} opacity={colors.gridOpacity} />
     </>
   );
 }
@@ -422,12 +356,12 @@ function FallbackBackground({ theme = "dark" }: { theme?: "light" | "dark" }) {
   const colors =
     theme === "light"
       ? {
-          primary: "rgba(99, 102, 241, 0.2)",
-          secondary: "rgba(139, 92, 246, 0.15)",
+          primary: "rgba(124, 124, 248, 0.2)",
+          secondary: "rgba(124, 124, 248, 0.15)",
         }
       : {
-          primary: "rgba(129, 140, 248, 0.3)",
-          secondary: "rgba(167, 139, 250, 0.2)",
+          primary: "rgba(124, 124, 248, 0.3)",
+          secondary: "rgba(124, 124, 248, 0.2)",
         };
 
   return (

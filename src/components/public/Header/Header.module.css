@@ -101,14 +101,14 @@
   padding: 10px 20px;
   border-radius: 10px;
   font-weight: 500;
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
   color: white;
   transition: all 0.3s ease;
 }
 
 .resumeBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 20px rgba(124, 124, 248, 0.3);
 }
 
 .mobileMenuBtn {

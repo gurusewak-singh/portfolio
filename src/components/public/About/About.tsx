@@ -214,7 +214,7 @@ export default function About() {
                   }}
                   whileHover={{
                     scale: 1.1,
-                    boxShadow: "0 20px 40px rgba(99, 102, 241, 0.2)",
+                    boxShadow: "0 20px 40px rgba(124, 124, 248, 0.2)",
                     borderColor: "var(--accent-primary)",
                   }}
                   style={{ perspective: 800 }}

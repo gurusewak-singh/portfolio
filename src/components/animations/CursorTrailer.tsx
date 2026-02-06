@@ -12,18 +12,18 @@ interface CursorTrailerProps {
 // Theme-aware cursor colors
 const cursorColors = {
   light: {
-    ring: "rgba(99, 102, 241, 0.6)",
-    ringHover: "rgba(139, 92, 246, 0.8)",
-    ringBg: "rgba(139, 92, 246, 0.15)",
-    dot: "rgba(99, 102, 241, 0.9)",
-    glow: "rgba(99, 102, 241, 0.6)",
+    ring: "rgba(124, 124, 248, 0.6)",
+    ringHover: "rgba(124, 124, 248, 0.8)",
+    ringBg: "rgba(124, 124, 248, 0.15)",
+    dot: "rgba(124, 124, 248, 0.9)",
+    glow: "rgba(124, 124, 248, 0.6)",
   },
   dark: {
-    ring: "rgba(129, 140, 248, 0.5)",
-    ringHover: "rgba(167, 139, 250, 0.8)",
-    ringBg: "rgba(167, 139, 250, 0.1)",
+    ring: "rgba(124, 124, 248, 0.5)",
+    ringHover: "rgba(124, 124, 248, 0.8)",
+    ringBg: "rgba(124, 124, 248, 0.1)",
     dot: "rgba(255, 255, 255, 0.9)",
-    glow: "rgba(129, 140, 248, 0.8)",
+    glow: "rgba(124, 124, 248, 0.8)",
   },
 };
 

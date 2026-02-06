@@ -170,7 +170,7 @@ a.contactValue:hover {
 .textarea:focus {
   outline: none;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(124, 124, 248, 0.1);
 }
 
 .input::placeholder,
@@ -215,7 +215,7 @@ a.contactValue:hover {
   padding: 16px 24px;
   font-size: 1rem;
   font-weight: 600;
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
   color: white;
   border: none;
   border-radius: 12px;
@@ -225,7 +225,7 @@ a.contactValue:hover {
 
 .submitBtn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 25px rgba(124, 124, 248, 0.4);
 }
 
 .submitBtn:disabled {

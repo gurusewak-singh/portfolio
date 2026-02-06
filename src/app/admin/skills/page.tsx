@@ -3,8 +3,8 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import styles from "./skills.module.css";
+import AdminSidebar from "@/components/admin/AdminSidebar";
 
 interface Skill {
   _id: string;
@@ -121,34 +121,7 @@ export default function AdminSkills() {
 
   return (
     <div className={styles.container}>
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
-          <Link href="/" className={styles.logo}>
-            <span className={styles.logoText}>Guru</span>
-            <span className={styles.logoDot}>.</span>
-          </Link>
-        </div>
-        <nav className={styles.nav}>
-          <Link href="/admin/dashboard" className={styles.navItem}>
-            Dashboard
-          </Link>
-          <Link href="/admin/projects" className={styles.navItem}>
-            Projects
-          </Link>
-          <Link href="/admin/experience" className={styles.navItem}>
-            Experience
-          </Link>
-          <Link
-            href="/admin/skills"
-            className={`${styles.navItem} ${styles.active}`}
-          >
-            Skills
-          </Link>
-          <Link href="/admin/messages" className={styles.navItem}>
-            Messages
-          </Link>
-        </nav>
-      </aside>
+      <AdminSidebar />
 
       <main className={styles.main}>
         <header className={styles.header}>
