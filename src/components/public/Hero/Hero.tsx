@@ -51,7 +51,7 @@ export default function Hero() {
           const photoData = await photoRes.json();
           if (photoData.value) setHeroPhoto(photoData.value);
         }
-      } catch (error) {
+      } catch {
         console.log("Using default hero settings");
       }
     };

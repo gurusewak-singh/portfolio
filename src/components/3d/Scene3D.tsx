@@ -4,17 +4,13 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Float,
   Sparkles,
-  useTexture,
-  MeshWobbleMaterial,
 } from "@react-three/drei";
 import {
   useRef,
-  useMemo,
   Suspense,
   useEffect,
   useState,
   memo,
-  useCallback,
 } from "react";
 import * as THREE from "three";
 import { motion } from "framer-motion";
@@ -69,23 +65,17 @@ function FrameLimiter({ fps = 30 }: { fps?: number }) {
 
 // Adaptive performance based on device
 function useAdaptivePerformance() {
-  const [quality, setQuality] = useState<"high" | "medium" | "low">("high");
-
-  useEffect(() => {
+  const [quality, setQuality] = useState<"high" | "medium" | "low">(() => {
+    if (typeof window === "undefined") return "high";
     const isMobile =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent,
       );
     const cores = navigator.hardwareConcurrency || 4;
-
-    if (isMobile || cores <= 2) {
-      setQuality("low");
-    } else if (cores <= 4) {
-      setQuality("medium");
-    } else {
-      setQuality("high");
-    }
-  }, []);
+    if (isMobile || cores <= 2) return "low";
+    if (cores <= 4) return "medium";
+    return "high";
+  });
 
   return quality;
 }
@@ -93,119 +83,6 @@ function useAdaptivePerformance() {
 // ============================================
 // 3D COMPONENTS - OPTIMIZED
 // ============================================
-
-// Floating crystal/gem shape - low poly but beautiful
-const FloatingCrystal = memo(function FloatingCrystal({
-  position,
-  color = "#818cf8",
-  size = 1,
-  rotationSpeed = 1,
-}: {
-  position: [number, number, number];
-  color?: string;
-  size?: number;
-  rotationSpeed?: number;
-}) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y =
-        state.clock.elapsedTime * 0.3 * rotationSpeed;
-      meshRef.current.rotation.z =
-        Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-      meshRef.current.position.y =
-        position[1] + Math.sin(state.clock.elapsedTime * 0.8) * 0.15;
-    }
-  });
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
-      <mesh ref={meshRef} position={position} scale={size}>
-        <octahedronGeometry args={[1, 0]} />
-        <meshStandardMaterial
-          ref={materialRef}
-          color={color}
-          metalness={0.9}
-          roughness={0.1}
-          envMapIntensity={1}
-        />
-      </mesh>
-    </Float>
-  );
-});
-
-// Animated torus knot - visually impressive, optimized
-const AnimatedTorusKnot = memo(function AnimatedTorusKnot({
-  position,
-  color = "#a78bfa",
-  size = 0.8,
-}: {
-  position: [number, number, number];
-  color?: string;
-  size?: number;
-}) {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-    }
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.8}>
-      <mesh ref={meshRef} position={position} scale={size}>
-        <torusKnotGeometry args={[0.6, 0.2, 64, 8, 2, 3]} />
-        <MeshWobbleMaterial
-          color={color}
-          metalness={0.8}
-          roughness={0.2}
-          factor={0.1}
-          speed={2}
-        />
-      </mesh>
-    </Float>
-  );
-});
-
-// Morphing sphere with noise
-const MorphingSphere = memo(function MorphingSphere({
-  position,
-  color = "#c084fc",
-  size = 1.2,
-}: {
-  position: [number, number, number];
-  color?: string;
-  size?: number;
-}) {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.15;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-      const scale = 1 + Math.sin(state.clock.elapsedTime) * 0.05;
-      meshRef.current.scale.setScalar(size * scale);
-    }
-  });
-
-  return (
-    <Float speed={1} rotationIntensity={0.2} floatIntensity={0.6}>
-      <mesh ref={meshRef} position={position}>
-        <icosahedronGeometry args={[1, 1]} />
-        <meshStandardMaterial
-          color={color}
-          metalness={0.7}
-          roughness={0.3}
-          flatShading
-        />
-      </mesh>
-    </Float>
-  );
-});
 
 // Wireframe orbital rings
 const OrbitalRings = memo(function OrbitalRings({
@@ -276,8 +153,6 @@ function HeroSceneContent({
   quality: "high" | "medium" | "low";
   theme: "light" | "dark";
 }) {
-  const particleCount =
-    quality === "high" ? 100 : quality === "medium" ? 50 : 25;
   const colors = themeColors[theme];
 
   return (
@@ -306,7 +181,6 @@ export function Hero3DScene() {
   const { theme } = useTheme();
 
   useEffect(() => {
-    setMounted(true);
     // Check WebGL support
     try {
       const canvas = document.createElement("canvas");
@@ -316,6 +190,7 @@ export function Hero3DScene() {
     } catch {
       setHasWebGL(false);
     }
+    setMounted(true);
   }, []);
 
   if (!mounted || !hasWebGL) {
@@ -445,7 +320,7 @@ export function About3DScene() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    requestAnimationFrame(() => setMounted(true));
   }, []);
 
   if (!mounted) return null;
@@ -546,7 +421,7 @@ export function Skills3DElement() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    requestAnimationFrame(() => setMounted(true));
   }, []);
 
   if (!mounted) return null;
