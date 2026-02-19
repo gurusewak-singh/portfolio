@@ -8,7 +8,11 @@ export async function GET() {
   try {
     await dbConnect();
     const projects = await Project.find({}).sort({ order: 1, createdAt: -1 });
-    return NextResponse.json(projects);
+    return NextResponse.json(projects, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error('Error fetching projects:', error);
     return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });

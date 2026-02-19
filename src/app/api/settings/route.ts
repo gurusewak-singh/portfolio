@@ -12,17 +12,21 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const key = searchParams.get("key");
 
+    const cacheHeaders = {
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    };
+
     if (key) {
       const setting = await SiteSettings.findOne({ key });
       if (!setting) {
         // Return empty object instead of 404 for easier frontend handling
-        return NextResponse.json({ key, value: null });
+        return NextResponse.json({ key, value: null }, { headers: cacheHeaders });
       }
-      return NextResponse.json(setting);
+      return NextResponse.json(setting, { headers: cacheHeaders });
     }
 
     const settings = await SiteSettings.find({});
-    return NextResponse.json(settings);
+    return NextResponse.json(settings, { headers: cacheHeaders });
   } catch (error: unknown) {
     const err = error as Error;
     return NextResponse.json({ error: err.message }, { status: 500 });

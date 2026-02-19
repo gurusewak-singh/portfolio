@@ -10,8 +10,14 @@ export const metadata: Metadata = {
   authors: [{ name: "Gurusewak Singh" }],
   openGraph: {
     title: "Gurusewak | AI/ML Engineer",
-    description: "Portfolio of Gurusewak - A passionate AI/ML Engineer",
+    description: "Portfolio of Gurusewak - A passionate AI/ML Engineer building intelligent systems",
     type: "website",
+    siteName: "Gurusewak.in",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gurusewak | AI/ML Engineer",
+    description: "Portfolio of Gurusewak - A passionate AI/ML Engineer building intelligent systems",
   },
 };
 
