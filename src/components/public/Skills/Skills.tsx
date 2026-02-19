@@ -39,7 +39,6 @@ const placeholderSkills: Skill[] = [
 ];
 
 const categories = [
-  { id: "all", label: "All Skills" },
   { id: "ml", label: "ML & AI" },
   { id: "backend", label: "Backend" },
   { id: "database", label: "Database" },
@@ -48,7 +47,7 @@ const categories = [
 
 export default function Skills() {
   const [skills, setSkills] = useState<Skill[]>(placeholderSkills);
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("ml");
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -68,10 +67,7 @@ export default function Skills() {
     fetchSkills();
   }, []);
 
-  const filteredSkills =
-    activeCategory === "all"
-      ? skills
-      : skills.filter((skill) => skill.category === activeCategory);
+  const filteredSkills = skills.filter((skill) => skill.category === activeCategory);
 
   return (
     <section id="skills" className={styles.skills}>

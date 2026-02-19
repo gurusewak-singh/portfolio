@@ -1,33 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  PreloadedAssets,
+  PreloadedAssetsProvider,
+} from "@/context/PreloadedAssetsContext";
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
+  progress: number;
 }
 
-export function LoadingScreen3D({ onLoadingComplete }: LoadingScreenProps) {
-  const [progress, setProgress] = useState(0);
-
+export function LoadingScreen3D({
+  onLoadingComplete,
+  progress,
+}: LoadingScreenProps) {
   useEffect(() => {
-    const duration = 2000;
-    const startTime = Date.now();
-
-    const updateProgress = () => {
-      const elapsed = Date.now() - startTime;
-      const newProgress = Math.min((elapsed / duration) * 100, 100);
-      setProgress(newProgress);
-
-      if (newProgress < 100) {
-        requestAnimationFrame(updateProgress);
-      } else {
-        setTimeout(onLoadingComplete, 400);
-      }
-    };
-
-    requestAnimationFrame(updateProgress);
-  }, [onLoadingComplete]);
+    if (progress >= 100) {
+      const timer = setTimeout(onLoadingComplete, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [progress, onLoadingComplete]);
 
   return (
     <motion.div
@@ -91,14 +85,118 @@ export function LoadingScreen3D({ onLoadingComplete }: LoadingScreenProps) {
   );
 }
 
-// Wrapper component with loading state
+// Helper: fetch a setting value from the API
+async function fetchSetting(key: string): Promise<string | null> {
+  try {
+    const res = await fetch(`/api/settings?key=${key}`);
+    if (res.ok) {
+      const data = await res.json();
+      return data.value || null;
+    }
+  } catch {
+    // Graceful fallback
+  }
+  return null;
+}
+
+// Helper: preload an image into the browser cache
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    // data: URIs don't need preloading — they're inline
+    if (src.startsWith("data:")) {
+      resolve();
+      return;
+    }
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve(); // Don't block on failure
+    img.src = src;
+  });
+}
+
+// Wrapper component with loading state and asset preloading
 export function LoadingWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [assets, setAssets] = useState<PreloadedAssets>({
+    heroBackground: null,
+    heroPhoto: null,
+    profileImage: null,
+  });
+
+  const assetsReady = useRef(false);
+  const timerReady = useRef(false);
+  const bothReadyChecked = useRef(false);
+
+  const checkBothReady = useCallback(() => {
+    if (assetsReady.current && timerReady.current && !bothReadyChecked.current) {
+      bothReadyChecked.current = true;
+      setProgress(100);
+    }
+  }, []);
 
   useEffect(() => {
     requestAnimationFrame(() => setMounted(true));
   }, []);
+
+  // Timer animation — drives progress bar from 0 to ~90% over 2 seconds
+  useEffect(() => {
+    if (!mounted) return;
+
+    const duration = 2000;
+    const startTime = Date.now();
+
+    const updateProgress = () => {
+      const elapsed = Date.now() - startTime;
+      // Cap at 90 until assets are also ready
+      const timerProgress = Math.min((elapsed / duration) * 90, 90);
+
+      if (!assetsReady.current) {
+        setProgress(timerProgress);
+      }
+
+      if (elapsed < duration) {
+        requestAnimationFrame(updateProgress);
+      } else {
+        timerReady.current = true;
+        checkBothReady();
+      }
+    };
+
+    requestAnimationFrame(updateProgress);
+  }, [mounted, checkBothReady]);
+
+  // Asset preloading — runs in parallel with the timer
+  useEffect(() => {
+    if (!mounted) return;
+
+    const preloadAll = async () => {
+      // 1. Fetch all settings in parallel
+      const [heroBackground, heroPhoto, profileImage] = await Promise.all([
+        fetchSetting("hero_background"),
+        fetchSetting("hero_photo"),
+        fetchSetting("profile_image"),
+      ]);
+
+      // 2. Store values
+      setAssets({ heroBackground, heroPhoto, profileImage });
+
+      // 3. Preload actual image bytes into browser cache
+      const imagesToPreload: Promise<void>[] = [];
+      if (heroBackground) imagesToPreload.push(preloadImage(heroBackground));
+      if (heroPhoto) imagesToPreload.push(preloadImage(heroPhoto));
+      if (profileImage) imagesToPreload.push(preloadImage(profileImage));
+
+      await Promise.all(imagesToPreload);
+
+      // 4. Mark assets as ready
+      assetsReady.current = true;
+      checkBothReady();
+    };
+
+    preloadAll();
+  }, [mounted, checkBothReady]);
 
   // Skip rendering on server
   if (!mounted) {
@@ -106,10 +204,13 @@ export function LoadingWrapper({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <PreloadedAssetsProvider value={assets}>
       <AnimatePresence mode="wait">
         {isLoading && (
-          <LoadingScreen3D onLoadingComplete={() => setIsLoading(false)} />
+          <LoadingScreen3D
+            onLoadingComplete={() => setIsLoading(false)}
+            progress={progress}
+          />
         )}
       </AnimatePresence>
       <motion.div
@@ -119,7 +220,7 @@ export function LoadingWrapper({ children }: { children: React.ReactNode }) {
       >
         {children}
       </motion.div>
-    </>
+    </PreloadedAssetsProvider>
   );
 }
 

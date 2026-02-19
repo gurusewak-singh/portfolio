@@ -1,17 +1,8 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  Float,
-  Sparkles,
-} from "@react-three/drei";
-import {
-  useRef,
-  Suspense,
-  useEffect,
-  useState,
-  memo,
-} from "react";
+import { Float, Sparkles } from "@react-three/drei";
+import { useRef, Suspense, useEffect, useState, memo } from "react";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";

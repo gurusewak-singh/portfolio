@@ -5,42 +5,14 @@ import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./About.module.css";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import { usePreloadedAssets } from "@/context/PreloadedAssetsContext";
 
-// Profile Image with fallback - fetches from settings API
+// Profile Image with fallback - uses preloaded assets from loading screen
 function ProfileImage() {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const { profileImage } = usePreloadedAssets();
   const [imageError, setImageError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const res = await fetch("/api/settings?key=profile_image");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.value) {
-            setImageSrc(data.value);
-          }
-        }
-      } catch {
-        console.log("Using placeholder profile image");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchProfileImage();
-  }, []);
-
-  // Show placeholder while loading or if no image/error
-  if (isLoading) {
-    return (
-      <div className={styles.profilePlaceholder}>
-        <span className={styles.placeholderInitial}>G</span>
-      </div>
-    );
-  }
-
-  if (imageError || !imageSrc) {
+  if (imageError || !profileImage) {
     return (
       <div className={styles.profilePlaceholder}>
         <span className={styles.placeholderInitial}>G</span>
@@ -50,14 +22,14 @@ function ProfileImage() {
 
   return (
     <Image
-      src={imageSrc}
+      src={profileImage}
       alt="Guru - ML Engineer & Full Stack Developer"
       fill
       style={{ objectFit: "cover" }}
       priority
       sizes="(max-width: 768px) 100vw, 350px"
       onError={() => setImageError(true)}
-      unoptimized={imageSrc.startsWith("data:")}
+      unoptimized={profileImage.startsWith("data:")}
     />
   );
 }

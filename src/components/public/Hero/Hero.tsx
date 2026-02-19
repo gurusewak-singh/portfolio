@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
+import { usePreloadedAssets } from "@/context/PreloadedAssetsContext";
 import styles from "./Hero.module.css";
 import FloatingElement from "@/components/animations/FloatingElement";
 import MagneticButton from "@/components/animations/MagneticButton";
@@ -23,40 +24,14 @@ const roles = ["ML Engineer", "AI Enthusiast", "Problem Solver"];
 
 export default function Hero() {
   const { theme } = useTheme();
+  const { heroBackground, heroPhoto } = usePreloadedAssets();
   const [currentRole, setCurrentRole] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [heroBackground, setHeroBackground] = useState<string | null>(null);
-  const [heroPhoto, setHeroPhoto] = useState<string | null>(null);
 
   // Theme-aware overlay colors
   const overlayColor =
     theme === "light" ? "rgba(248,250,252,0.6)" : "rgba(0,0,0,0.55)";
-
-  // Fetch hero settings
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const [bgRes, photoRes] = await Promise.all([
-          fetch("/api/settings?key=hero_background"),
-          fetch("/api/settings?key=hero_photo"),
-        ]);
-
-        if (bgRes.ok) {
-          const bgData = await bgRes.json();
-          if (bgData.value) setHeroBackground(bgData.value);
-        }
-
-        if (photoRes.ok) {
-          const photoData = await photoRes.json();
-          if (photoData.value) setHeroPhoto(photoData.value);
-        }
-      } catch {
-        console.log("Using default hero settings");
-      }
-    };
-    fetchSettings();
-  }, []);
 
   useEffect(() => {
     const currentText = roles[currentRole];
