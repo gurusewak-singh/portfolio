@@ -3,11 +3,11 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import { usePreloadedAssets } from "@/context/PreloadedAssetsContext";
 import styles from "./About.module.css";
 import ScrollReveal from "@/components/animations/ScrollReveal";
-import { usePreloadedAssets } from "@/context/PreloadedAssetsContext";
 
-// Profile Image with fallback - uses preloaded assets from loading screen
+// Profile Image with fallback - uses preloaded assets from context
 function ProfileImage() {
   const { profileImage } = usePreloadedAssets();
   const [imageError, setImageError] = useState(false);

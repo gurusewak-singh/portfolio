@@ -1,28 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  PreloadedAssets,
   PreloadedAssetsProvider,
+  PreloadedAssets,
 } from "@/context/PreloadedAssetsContext";
 
 interface LoadingScreenProps {
-  onLoadingComplete: () => void;
   progress: number;
 }
 
-export function LoadingScreen3D({
-  onLoadingComplete,
-  progress,
-}: LoadingScreenProps) {
-  useEffect(() => {
-    if (progress >= 100) {
-      const timer = setTimeout(onLoadingComplete, 400);
-      return () => clearTimeout(timer);
-    }
-  }, [progress, onLoadingComplete]);
-
+function LoadingScreen3D({ progress }: LoadingScreenProps) {
   return (
     <motion.div
       initial={{ opacity: 1 }}
@@ -85,118 +74,102 @@ export function LoadingScreen3D({
   );
 }
 
-// Helper: fetch a setting value from the API
-async function fetchSetting(key: string): Promise<string | null> {
-  try {
-    const res = await fetch(`/api/settings?key=${key}`);
-    if (res.ok) {
-      const data = await res.json();
-      return data.value || null;
-    }
-  } catch {
-    // Graceful fallback
-  }
-  return null;
-}
-
-// Helper: preload an image into the browser cache
-function preloadImage(src: string): Promise<void> {
+// Preload a single image, returns the src on success or null on failure
+function preloadImage(src: string): Promise<string | null> {
   return new Promise((resolve) => {
-    // data: URIs don't need preloading — they're inline
-    if (src.startsWith("data:")) {
-      resolve();
-      return;
-    }
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = () => resolve(); // Don't block on failure
+    const img = new window.Image();
+    img.onload = () => resolve(src);
+    img.onerror = () => resolve(null);
     img.src = src;
   });
 }
 
-// Wrapper component with loading state and asset preloading
+// Wrapper component with loading state + real asset preloading
 export function LoadingWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [assets, setAssets] = useState<PreloadedAssets>({
+  const [preloadedAssets, setPreloadedAssets] = useState<PreloadedAssets>({
     heroBackground: null,
     heroPhoto: null,
     profileImage: null,
   });
 
-  const assetsReady = useRef(false);
-  const timerReady = useRef(false);
-  const bothReadyChecked = useRef(false);
+  const performPreload = useCallback(async () => {
+    try {
+      // Step 1: Fetch all image URLs from settings API (30% progress)
+      setProgress(10);
 
-  const checkBothReady = useCallback(() => {
-    if (assetsReady.current && timerReady.current && !bothReadyChecked.current) {
-      bothReadyChecked.current = true;
+      const settingsKeys = ["hero_background", "hero_photo", "profile_image"];
+      const fetchPromises = settingsKeys.map((key) =>
+        fetch(`/api/settings?key=${key}`)
+          .then((res) => (res.ok ? res.json() : null))
+          .catch(() => null)
+      );
+
+      const results = await Promise.all(fetchPromises);
+      setProgress(30);
+
+      const heroBackgroundUrl = results[0]?.value || null;
+      const heroPhotoUrl = results[1]?.value || null;
+      const profileImageUrl = results[2]?.value || null;
+
+      // Step 2: Preload all images in parallel (30% -> 90%)
+      const imagesToPreload: { key: keyof PreloadedAssets; url: string | null }[] = [
+        { key: "heroBackground", url: heroBackgroundUrl },
+        { key: "heroPhoto", url: heroPhotoUrl },
+        { key: "profileImage", url: profileImageUrl },
+      ];
+
+      const validImages = imagesToPreload.filter((img) => img.url);
+      const totalImages = validImages.length;
+      let loadedCount = 0;
+
+      const assets: PreloadedAssets = {
+        heroBackground: heroBackgroundUrl,
+        heroPhoto: heroPhotoUrl,
+        profileImage: profileImageUrl,
+      };
+
+      if (totalImages > 0) {
+        const imagePromises = validImages.map(async (img) => {
+          // Only preload non-data URLs (data: URLs are already inline)
+          if (img.url && !img.url.startsWith("data:")) {
+            await preloadImage(img.url);
+          }
+          loadedCount++;
+          setProgress(30 + Math.round((loadedCount / totalImages) * 60));
+        });
+
+        await Promise.all(imagePromises);
+      } else {
+        setProgress(90);
+      }
+
+      setPreloadedAssets(assets);
       setProgress(100);
+
+      // Small delay for smooth transition
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    } catch {
+      // On error, still complete loading so site isn't stuck
+      console.log("Asset preloading had issues, continuing anyway");
+      setProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 400));
     }
+
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     requestAnimationFrame(() => setMounted(true));
   }, []);
 
-  // Timer animation — drives progress bar from 0 to ~90% over 2 seconds
   useEffect(() => {
-    if (!mounted) return;
-
-    const duration = 2000;
-    const startTime = Date.now();
-
-    const updateProgress = () => {
-      const elapsed = Date.now() - startTime;
-      // Cap at 90 until assets are also ready
-      const timerProgress = Math.min((elapsed / duration) * 90, 90);
-
-      if (!assetsReady.current) {
-        setProgress(timerProgress);
-      }
-
-      if (elapsed < duration) {
-        requestAnimationFrame(updateProgress);
-      } else {
-        timerReady.current = true;
-        checkBothReady();
-      }
-    };
-
-    requestAnimationFrame(updateProgress);
-  }, [mounted, checkBothReady]);
-
-  // Asset preloading — runs in parallel with the timer
-  useEffect(() => {
-    if (!mounted) return;
-
-    const preloadAll = async () => {
-      // 1. Fetch all settings in parallel
-      const [heroBackground, heroPhoto, profileImage] = await Promise.all([
-        fetchSetting("hero_background"),
-        fetchSetting("hero_photo"),
-        fetchSetting("profile_image"),
-      ]);
-
-      // 2. Store values
-      setAssets({ heroBackground, heroPhoto, profileImage });
-
-      // 3. Preload actual image bytes into browser cache
-      const imagesToPreload: Promise<void>[] = [];
-      if (heroBackground) imagesToPreload.push(preloadImage(heroBackground));
-      if (heroPhoto) imagesToPreload.push(preloadImage(heroPhoto));
-      if (profileImage) imagesToPreload.push(preloadImage(profileImage));
-
-      await Promise.all(imagesToPreload);
-
-      // 4. Mark assets as ready
-      assetsReady.current = true;
-      checkBothReady();
-    };
-
-    preloadAll();
-  }, [mounted, checkBothReady]);
+    if (mounted) {
+      performPreload();
+    }
+  }, [mounted, performPreload]);
 
   // Skip rendering on server
   if (!mounted) {
@@ -204,14 +177,9 @@ export function LoadingWrapper({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <PreloadedAssetsProvider value={assets}>
+    <PreloadedAssetsProvider value={preloadedAssets}>
       <AnimatePresence mode="wait">
-        {isLoading && (
-          <LoadingScreen3D
-            onLoadingComplete={() => setIsLoading(false)}
-            progress={progress}
-          />
-        )}
+        {isLoading && <LoadingScreen3D progress={progress} />}
       </AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
@@ -224,4 +192,5 @@ export function LoadingWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+export { LoadingScreen3D };
 export default LoadingScreen3D;

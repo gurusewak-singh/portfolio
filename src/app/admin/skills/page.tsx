@@ -11,6 +11,7 @@ interface Skill {
   name: string;
   category: string;
   proficiency: number;
+  order: number;
 }
 
 const categories = [
@@ -45,7 +46,7 @@ export default function AdminSkills() {
 
   const fetchSkills = async () => {
     try {
-      const res = await fetch("/api/skills");
+      const res = await fetch("/api/skills", { cache: "no-store" });
       const data = await res.json();
       setSkills(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -68,9 +69,13 @@ export default function AdminSkills() {
       if (res.ok) {
         fetchSkills();
         resetForm();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to save skill: ${errorData.error || res.statusText}`);
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error saving skill. Please try again.");
     }
   };
 
@@ -79,7 +84,7 @@ export default function AdminSkills() {
       name: skill.name,
       category: skill.category,
       proficiency: skill.proficiency,
-      order: 0,
+      order: skill.order || 0,
     });
     setEditingId(skill._id);
     setShowForm(true);
@@ -89,9 +94,16 @@ export default function AdminSkills() {
     if (!confirm("Delete this skill?")) return;
     try {
       const res = await fetch(`/api/skills/${id}`, { method: "DELETE" });
-      if (res.ok) fetchSkills();
+      if (res.ok) {
+        setSkills((prev) => prev.filter((s) => s._id !== id));
+        fetchSkills();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to delete skill: ${errorData.error || res.statusText}`);
+      }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error deleting skill. Please try again.");
     }
   };
 

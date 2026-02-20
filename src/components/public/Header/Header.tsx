@@ -16,7 +16,8 @@ export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState("/resume.pdf");
+  const [resumeUrl, setResumeUrl] = useState<string | null>(null);
+  const [resumeLoading, setResumeLoading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,21 +28,32 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const fetchResumeUrl = async () => {
-      try {
-        const res = await fetch("/api/settings?key=resume_file");
-        const data = await res.json();
-        if (data.value) {
-          setResumeUrl(data.value);
-        }
-      } catch (error) {
-        console.error("Error fetching resume URL:", error);
-      }
-    };
+  // Lazy-load resume only when user clicks the button
+  const handleResumeClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // If already fetched, let the default download behavior work
+    if (resumeUrl) return;
 
-    fetchResumeUrl();
-  }, []);
+    e.preventDefault();
+    if (resumeLoading) return;
+
+    setResumeLoading(true);
+    try {
+      const res = await fetch("/api/settings?key=resume_file");
+      const data = await res.json();
+      if (data.value) {
+        setResumeUrl(data.value);
+        // Trigger download after URL is ready
+        const link = document.createElement("a");
+        link.href = data.value;
+        link.download = "Gurusewak_Resume.pdf";
+        link.click();
+      }
+    } catch (error) {
+      console.error("Error fetching resume:", error);
+    } finally {
+      setResumeLoading(false);
+    }
+  };
 
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
@@ -102,11 +114,12 @@ export default function Header() {
           </button>
 
           <a
-            href={resumeUrl}
-            download="Gurusewak_Resume.pdf"
+            href={resumeUrl || "#"}
+            download={resumeUrl ? "Gurusewak_Resume.pdf" : undefined}
             className={styles.resumeBtn}
+            onClick={handleResumeClick}
           >
-            Resume
+            {resumeLoading ? "Loading..." : "Resume"}
           </a>
 
           <button

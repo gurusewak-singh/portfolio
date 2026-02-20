@@ -15,6 +15,7 @@ interface Experience {
   startDate: string;
   endDate?: string;
   current: boolean;
+  order: number;
 }
 
 export default function AdminExperience() {
@@ -47,7 +48,7 @@ export default function AdminExperience() {
 
   const fetchExperiences = async () => {
     try {
-      const res = await fetch("/api/experience");
+      const res = await fetch("/api/experience", { cache: "no-store" });
       const data = await res.json();
       setExperiences(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -83,9 +84,13 @@ export default function AdminExperience() {
       if (res.ok) {
         fetchExperiences();
         resetForm();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to save experience: ${errorData.error || res.statusText}`);
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error saving experience. Please try again.");
     }
   };
 
@@ -98,7 +103,7 @@ export default function AdminExperience() {
       startDate: exp.startDate.split("T")[0],
       endDate: exp.endDate ? exp.endDate.split("T")[0] : "",
       current: exp.current,
-      order: 0,
+      order: exp.order || 0,
     });
     setEditingId(exp._id);
     setShowForm(true);
@@ -108,9 +113,16 @@ export default function AdminExperience() {
     if (!confirm("Delete this experience?")) return;
     try {
       const res = await fetch(`/api/experience/${id}`, { method: "DELETE" });
-      if (res.ok) fetchExperiences();
+      if (res.ok) {
+        setExperiences((prev) => prev.filter((e) => e._id !== id));
+        fetchExperiences();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to delete experience: ${errorData.error || res.statusText}`);
+      }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error deleting experience. Please try again.");
     }
   };
 

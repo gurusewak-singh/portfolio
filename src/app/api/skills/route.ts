@@ -8,11 +8,7 @@ export async function GET() {
   try {
     await dbConnect();
     const skills = await Skill.find({}).sort({ category: 1, order: 1 });
-    return NextResponse.json(skills, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
-      },
-    });
+    return NextResponse.json(skills);
   } catch (error) {
     console.error('Error fetching skills:', error);
     return NextResponse.json({ error: 'Failed to fetch skills' }, { status: 500 });

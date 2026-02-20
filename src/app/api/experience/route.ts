@@ -8,11 +8,7 @@ export async function GET() {
   try {
     await dbConnect();
     const experiences = await Experience.find({}).sort({ order: 1, startDate: -1 });
-    return NextResponse.json(experiences, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
-      },
-    });
+    return NextResponse.json(experiences);
   } catch (error) {
     console.error('Error fetching experiences:', error);
     return NextResponse.json({ error: 'Failed to fetch experiences' }, { status: 500 });

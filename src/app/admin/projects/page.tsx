@@ -10,8 +10,13 @@ interface Project {
   _id: string;
   title: string;
   description: string;
+  longDescription?: string;
   technologies: string[];
+  imageUrl?: string;
+  githubUrl?: string;
+  liveUrl?: string;
   featured: boolean;
+  order: number;
   createdAt: string;
 }
 
@@ -48,7 +53,7 @@ export default function AdminProjects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch("/api/projects");
+      const res = await fetch("/api/projects", { cache: "no-store" });
       const data = await res.json();
       setProjects(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -81,9 +86,14 @@ export default function AdminProjects() {
       if (res.ok) {
         fetchProjects();
         resetForm();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Save failed:", res.status, errorData);
+        alert(`Failed to save project: ${errorData.error || res.statusText}`);
       }
     } catch (error) {
       console.error("Error saving project:", error);
+      alert("Error saving project. Please try again.");
     }
   };
 
@@ -91,13 +101,13 @@ export default function AdminProjects() {
     setFormData({
       title: project.title,
       description: project.description,
-      longDescription: "",
+      longDescription: project.longDescription || "",
       technologies: project.technologies.join(", "),
-      imageUrl: "",
-      githubUrl: "",
-      liveUrl: "",
+      imageUrl: project.imageUrl || "",
+      githubUrl: project.githubUrl || "",
+      liveUrl: project.liveUrl || "",
       featured: project.featured,
-      order: 0,
+      order: project.order || 0,
     });
     setEditingId(project._id);
     setShowForm(true);
@@ -109,10 +119,16 @@ export default function AdminProjects() {
     try {
       const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
       if (res.ok) {
+        setProjects((prev) => prev.filter((p) => p._id !== id));
         fetchProjects();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Delete failed:", res.status, errorData);
+        alert(`Failed to delete project: ${errorData.error || res.statusText}`);
       }
     } catch (error) {
       console.error("Error deleting project:", error);
+      alert("Error deleting project. Please try again.");
     }
   };
 

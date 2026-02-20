@@ -32,7 +32,7 @@ export default function AdminMessages() {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch("/api/messages");
+      const res = await fetch("/api/messages", { cache: "no-store" });
       const data = await res.json();
       setMessages(Array.isArray(data) ? data : []);
     } catch (error) {
