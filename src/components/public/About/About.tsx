@@ -23,7 +23,7 @@ function ProfileImage() {
   return (
     <Image
       src={profileImage}
-      alt="Guru - ML Engineer & Full Stack Developer"
+      alt="Gurusewak - AI/ML Engineer"
       fill
       style={{ objectFit: "cover" }}
       priority
@@ -70,9 +70,9 @@ function useAnimatedCounter(
 }
 
 export default function About() {
-  const stat1 = useAnimatedCounter(3, 1500);
-  const stat2 = useAnimatedCounter(20, 2000);
-  const stat3 = useAnimatedCounter(15, 1800);
+  const stat1 = useAnimatedCounter(1, 1500);
+  const stat2 = useAnimatedCounter(5, 2000);
+  const stat3 = useAnimatedCounter(3, 1800);
 
   return (
     <section id="about" className={styles.about}>
@@ -103,31 +103,16 @@ export default function About() {
           <div className={styles.text}>
             {[
               <>
-                Hello! I&apos;m Guru, a passionate{" "}
-                <span className={styles.highlight}>AI/ML Engineer</span> and{" "}
-                <span className={styles.highlight}>Full Stack Developer</span>{" "}
-                with a deep love for building intelligent systems and beautiful
-                web applications.
+                Hi, I’m Guru, an <span className={styles.highlight}>AI/ML Engineer</span> focused on building production-ready intelligent systems and scalable backend applications. I work on machine learning models, Large Language Model (LLM) applications, and high-performance APIs designed for real-world use.
               </>,
               <>
-                My journey in tech started with a curiosity about how machines
-                can learn and make decisions. This curiosity led me to dive deep
-                into machine learning, deep learning, and artificial
-                intelligence, while simultaneously building robust web
-                applications to bring these models to life.
+                My experience includes developing Retrieval-Augmented Generation (RAG) systems, deploying models on GPU infrastructure, and building backend services using FastAPI and PostgreSQL. I focus on creating efficient, reliable systems that perform well in production environments.
               </>,
               <>
-                I believe in the power of combining cutting-edge AI with
-                practical software engineering to create solutions that make a
-                real difference. Whether it&apos;s developing predictive models,
-                building scalable APIs, or crafting intuitive user interfaces, I
-                approach every project with the same enthusiasm and attention to
-                detail.
+                I approach engineering with strong fundamentals in machine learning, system design, and backend development. My goal is to build practical AI systems that are scalable, maintainable, and impactful.
               </>,
               <>
-                When I&apos;m not coding, you can find me exploring the latest
-                research papers, contributing to open-source projects, or
-                experimenting with new technologies.
+                Outside of development, I actively explore research, experiment with new architectures, and work on projects that deepen my expertise in artificial intelligence and software engineering.
               </>,
             ].map((paragraph, index) => (
               <ScrollReveal
@@ -169,7 +154,7 @@ export default function About() {
 
             <div className={styles.stats}>
               {[
-                { value: stat1, suffix: "+", label: "Years Experience" },
+                { value: stat1, suffix: "", label: "Years Experience" },
                 { value: stat2, suffix: "+", label: "Projects Completed" },
                 { value: stat3, suffix: "+", label: "ML Models Deployed" },
               ].map((stat, index) => (

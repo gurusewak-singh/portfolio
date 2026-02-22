@@ -34,7 +34,7 @@ export default function Footer() {
               <ul className={styles.linkList}>
                 <li><a href="https://github.com/gurusewak-singh" target="_blank" rel="noopener noreferrer">GitHub</a></li>
                 <li><a href="https://linkedin.com/in/gurusewak122" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-                <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                <li><a href="https://twitter.com/iamguruuu" target="_blank" rel="noopener noreferrer">Twitter</a></li>
                 <li><a href="mailto:singhgurusewakk@gmail.com">Email</a></li>
               </ul>
             </div>
