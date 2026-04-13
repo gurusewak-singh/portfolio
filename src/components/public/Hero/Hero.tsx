@@ -29,9 +29,8 @@ export default function Hero() {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Theme-aware overlay colors
-  const overlayColor =
-    theme === "light" ? "rgba(248,250,252,0.6)" : "rgba(0,0,0,0.55)";
+  // Always dark overlay
+  const overlayColor = "rgba(0,0,0,0.75)";
 
   useEffect(() => {
     const currentText = roles[currentRole];
@@ -155,7 +154,7 @@ export default function Hero() {
                 className={styles.primaryBtn}
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(124, 124, 248, 0.4)",
+                  boxShadow: "0 20px 40px rgba(255, 255, 255, 0.1)",
                 }}
                 whileTap={{ scale: 0.95 }}
               >

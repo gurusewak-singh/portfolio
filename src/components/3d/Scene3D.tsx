@@ -7,29 +7,29 @@ import * as THREE from "three";
 import { motion } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 
-// Theme color configurations
+// Monochrome color configuration — always black+white
 const themeColors = {
   light: {
-    crystal: "#6366f1",
-    torusKnot: "#8b5cf6",
-    sphere: "#a855f7",
-    orbital: "#6366f1",
-    sparkles: "#8b5cf6",
-    grid: "#6366f1",
-    ambient: 0.6,
-    gridOpacity: 0.05,
-    sparkleOpacity: 0.4,
+    crystal: "#ffffff",
+    torusKnot: "rgba(255,255,255,0.6)",
+    sphere: "rgba(255,255,255,0.4)",
+    orbital: "rgba(255,255,255,0.5)",
+    sparkles: "#ffffff",
+    grid: "rgba(255,255,255,0.5)",
+    ambient: 0.4,
+    gridOpacity: 0.04,
+    sparkleOpacity: 0.3,
   },
   dark: {
-    crystal: "#818cf8",
-    torusKnot: "#a78bfa",
-    sphere: "#c084fc",
-    orbital: "#818cf8",
-    sparkles: "#a78bfa",
-    grid: "#818cf8",
+    crystal: "#ffffff",
+    torusKnot: "rgba(255,255,255,0.6)",
+    sphere: "rgba(255,255,255,0.4)",
+    orbital: "rgba(255,255,255,0.5)",
+    sparkles: "#ffffff",
+    grid: "rgba(255,255,255,0.5)",
     ambient: 0.4,
-    gridOpacity: 0.08,
-    sparkleOpacity: 0.5,
+    gridOpacity: 0.04,
+    sparkleOpacity: 0.3,
   },
 };
 
@@ -78,7 +78,7 @@ function useAdaptivePerformance() {
 // Wireframe orbital rings
 const OrbitalRings = memo(function OrbitalRings({
   position,
-  color = "#818cf8",
+  color = "rgba(255,255,255,0.5)",
   size = 2,
 }: {
   position: [number, number, number];
@@ -102,11 +102,11 @@ const OrbitalRings = memo(function OrbitalRings({
       </mesh>
       <mesh rotation={[Math.PI / 3, Math.PI / 4, 0]}>
         <torusGeometry args={[size * 0.8, 0.015, 8, 64]} />
-        <meshBasicMaterial color="#c084fc" transparent opacity={0.4} />
+        <meshBasicMaterial color="rgba(255,255,255,0.5)" transparent opacity={0.35} />
       </mesh>
       <mesh rotation={[Math.PI / 4, Math.PI / 2, 0]}>
         <torusGeometry args={[size * 0.6, 0.01, 8, 64]} />
-        <meshBasicMaterial color="#a78bfa" transparent opacity={0.3} />
+        <meshBasicMaterial color="rgba(255,255,255,0.3)" transparent opacity={0.25} />
       </mesh>
     </group>
   );
@@ -114,8 +114,8 @@ const OrbitalRings = memo(function OrbitalRings({
 
 // Grid floor with glow effect
 const GridFloor = memo(function GridFloor({
-  color = "#818cf8",
-  opacity = 0.08,
+  color = "rgba(255,255,255,0.5)",
+  opacity = 0.04,
 }: {
   color?: string;
   opacity?: number;
@@ -219,16 +219,10 @@ export function Hero3DScene() {
 
 // Fallback for no WebGL
 function FallbackBackground({ theme = "dark" }: { theme?: "light" | "dark" }) {
-  const colors =
-    theme === "light"
-      ? {
-          primary: "rgba(124, 124, 248, 0.2)",
-          secondary: "rgba(124, 124, 248, 0.15)",
-        }
-      : {
-          primary: "rgba(124, 124, 248, 0.3)",
-          secondary: "rgba(124, 124, 248, 0.2)",
-        };
+  const colors = {
+    primary: "rgba(255, 255, 255, 0.06)",
+    secondary: "rgba(255, 255, 255, 0.03)",
+  };
 
   return (
     <div
@@ -276,21 +270,21 @@ function AboutSceneContent({
     <>
       <FrameLimiter fps={24} />
       <ambientLight intensity={0.3} />
-      <pointLight position={[5, 5, 5]} intensity={0.6} color="#a78bfa" />
+      <pointLight position={[5, 5, 5]} intensity={0.5} color="#ffffff" />
 
       <Float speed={1} rotationIntensity={0.3} floatIntensity={0.5}>
         <mesh position={[0, 0, 0]}>
           <dodecahedronGeometry args={[1.5, 0]} />
           <meshStandardMaterial
-            color="#c084fc"
-            metalness={0.8}
-            roughness={0.2}
+            color="#ffffff"
+            metalness={0.9}
+            roughness={0.1}
             flatShading
           />
         </mesh>
       </Float>
 
-      <OrbitalRings position={[0, 0, 0]} color="#818cf8" size={2.5} />
+      <OrbitalRings position={[0, 0, 0]} color="rgba(255,255,255,0.5)" size={2.5} />
 
       {quality !== "low" && (
         <Sparkles
@@ -298,8 +292,8 @@ function AboutSceneContent({
           scale={8}
           size={1.5}
           speed={0.2}
-          color="#a78bfa"
-          opacity={0.4}
+          color="#ffffff"
+          opacity={0.25}
         />
       )}
     </>
@@ -363,14 +357,14 @@ function SkillsSceneContent() {
     <>
       <FrameLimiter fps={24} />
       <ambientLight intensity={0.4} />
-      <pointLight position={[3, 3, 3]} intensity={0.8} color="#818cf8" />
+      <pointLight position={[3, 3, 3]} intensity={0.6} color="#ffffff" />
 
       <group ref={groupRef}>
         {/* Interlocking torus rings */}
         <mesh rotation={[0, 0, 0]}>
           <torusGeometry args={[1.2, 0.08, 16, 48]} />
           <meshStandardMaterial
-            color="#818cf8"
+            color="#ffffff"
             metalness={0.9}
             roughness={0.1}
           />
@@ -378,7 +372,7 @@ function SkillsSceneContent() {
         <mesh rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[1, 0.06, 16, 48]} />
           <meshStandardMaterial
-            color="#a78bfa"
+            color="rgba(255,255,255,0.7)"
             metalness={0.9}
             roughness={0.1}
           />
@@ -386,7 +380,7 @@ function SkillsSceneContent() {
         <mesh rotation={[0, 0, Math.PI / 2]}>
           <torusGeometry args={[0.8, 0.05, 16, 48]} />
           <meshStandardMaterial
-            color="#c084fc"
+            color="rgba(255,255,255,0.5)"
             metalness={0.9}
             roughness={0.1}
           />
@@ -396,11 +390,11 @@ function SkillsSceneContent() {
         <mesh>
           <icosahedronGeometry args={[0.3, 1]} />
           <meshStandardMaterial
-            color="#e879f9"
-            metalness={0.8}
-            roughness={0.2}
-            emissive="#818cf8"
-            emissiveIntensity={0.2}
+            color="#ffffff"
+            metalness={0.9}
+            roughness={0.1}
+            emissive="#ffffff"
+            emissiveIntensity={0.1}
           />
         </mesh>
       </group>

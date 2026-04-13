@@ -48,7 +48,7 @@ export default function Contact() {
   const inputVariants = {
     focused: {
       scale: 1.02,
-      boxShadow: "0 10px 30px rgba(124, 124, 248, 0.15)",
+      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.5)",
       borderColor: "var(--accent-primary)",
     },
     unfocused: {
@@ -390,7 +390,7 @@ export default function Contact() {
                   disabled={status === "loading"}
                   whileHover={{
                     scale: 1.03,
-                    boxShadow: "0 20px 40px rgba(124, 124, 248, 0.4)",
+                    boxShadow: "0 12px 32px rgba(255, 255, 255, 0.12)",
                   }}
                   whileTap={{ scale: 0.97 }}
                   initial={{ opacity: 0, y: 20 }}

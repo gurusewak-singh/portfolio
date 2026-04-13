@@ -174,7 +174,7 @@ export default function Experience() {
                 className={styles.timelineContent}
                 whileHover={{
                   scale: 1.02,
-                  boxShadow: "0 25px 50px -12px rgba(124, 124, 248, 0.25)",
+                  boxShadow: "0 20px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.12)",
                   borderColor: "var(--accent-primary)",
                 }}
                 transition={{ duration: 0.3 }}

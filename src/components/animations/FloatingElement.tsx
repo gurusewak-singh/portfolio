@@ -56,7 +56,7 @@ interface FloatingOrbProps {
 export function FloatingOrb({
   className = "",
   size = 300,
-  color = "rgba(124, 124, 248, 0.3)",
+  color = "rgba(255, 255, 255, 0.04)",
   duration = 20,
   delay = 0,
   xRange = 50,

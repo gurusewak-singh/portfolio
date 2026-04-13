@@ -21,7 +21,7 @@ function LoadingScreen3D({ progress }: LoadingScreenProps) {
         position: "fixed",
         inset: 0,
         zIndex: 9999,
-        background: "#0a0a0f",
+        background: "#000000",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -37,12 +37,12 @@ function LoadingScreen3D({ progress }: LoadingScreenProps) {
           fontSize: "clamp(2rem, 6vw, 3.5rem)",
           fontWeight: 700,
           margin: 0,
-          fontFamily: "Inter, -apple-system, sans-serif",
-          letterSpacing: "-0.02em",
+          fontFamily: "Syne, -apple-system, sans-serif",
+          letterSpacing: "-0.03em",
         }}
       >
         <span style={{ color: "#ffffff" }}>Gurusewak</span>
-        <span style={{ color: "#7c7cf8" }}>.in</span>
+        <span style={{ color: "rgba(255,255,255,0.3)" }}>.in</span>
       </motion.h1>
 
       {/* Simple loading bar */}
@@ -53,17 +53,17 @@ function LoadingScreen3D({ progress }: LoadingScreenProps) {
         style={{
           marginTop: "2rem",
           width: "120px",
-          height: "4px",
-          background: "rgba(124, 124, 248, 0.15)",
-          borderRadius: "2px",
+          height: "2px",
+          background: "rgba(255, 255, 255, 0.08)",
+          borderRadius: "1px",
           overflow: "hidden",
         }}
       >
         <motion.div
           style={{
             height: "100%",
-            background: "#7c7cf8",
-            borderRadius: "2px",
+            background: "rgba(255, 255, 255, 0.7)",
+            borderRadius: "1px",
           }}
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}

@@ -1,6 +1,22 @@
 .skills {
   padding: 120px 0;
   background: var(--bg-secondary);
+  position: relative;
+}
+
+.skills::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
 }
 
 .container {
@@ -12,89 +28,104 @@
 .header {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   margin-bottom: 16px;
 }
 
 .sectionNumber {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1rem;
-  color: var(--accent-primary);
-  font-weight: 500;
+  font-family: "DM Mono", monospace;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 400;
+  letter-spacing: 0.06em;
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-family: "Syne", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #ffffff;
   white-space: nowrap;
+  letter-spacing: -0.025em;
 }
 
 .line {
   flex: 1;
   height: 1px;
-  background: var(--border-color);
-  max-width: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  max-width: 320px;
 }
 
 .subtitle {
+  font-family: "Outfit", sans-serif;
   font-size: 1.0625rem;
-  color: var(--text-secondary);
-  max-width: 600px;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 580px;
   margin-bottom: 32px;
+  font-weight: 300;
+  line-height: 1.75;
 }
 
 .categories {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 40px;
 }
 
 .categoryBtn {
   position: relative;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 9px 22px;
+  border-radius: 6px;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 0.9375rem;
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.25s ease;
   cursor: pointer;
+  letter-spacing: 0.01em;
 }
 
 .categoryBtn:hover {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-1px);
 }
 
 .categoryBtn.active {
-  background: var(--accent-primary);
-  color: white;
+  background: #ffffff;
+  color: #000000;
   border-color: transparent;
+  font-weight: 600;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 16px;
 }
 
 .skillCard {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
   padding: 20px;
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.45s ease forwards;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .skillCard:hover {
-  border-color: var(--accent-primary);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
   transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
 }
 
 @keyframes fadeIn {
@@ -107,32 +138,53 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .skillName {
-  font-weight: 600;
-  color: var(--text-primary);
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
 }
 
 .skillPercent {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.875rem;
-  color: var(--accent-primary);
+  font-family: "DM Mono", monospace;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.04em;
 }
 
 .progressBar {
-  height: 6px;
-  background: var(--bg-tertiary);
-  border-radius: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .progress {
   height: 100%;
-  background: var(--accent-primary);
-  border-radius: 3px;
-  transition: width 0.8s ease;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border-radius: 2px;
+  transition: width 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.progress::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
 }
 
 @media (max-width: 768px) {
@@ -150,7 +202,7 @@
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.625rem;
   }
 
   .line {
@@ -166,13 +218,13 @@
   }
 
   .categoryBtn {
-    padding: 10px 16px;
+    padding: 8px 16px;
     font-size: 0.875rem;
   }
 
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
 
   .skillCard {
@@ -180,7 +232,7 @@
   }
 
   .skillName {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 }
 

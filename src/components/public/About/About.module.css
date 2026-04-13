@@ -1,6 +1,22 @@
 .about {
   padding: 120px 0;
   position: relative;
+  background: var(--bg-secondary);
+}
+
+.about::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
 }
 
 .container {
@@ -12,29 +28,32 @@
 .header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 48px;
+  gap: 18px;
+  margin-bottom: 56px;
 }
 
 .sectionNumber {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1rem;
-  color: var(--accent-primary);
-  font-weight: 500;
+  font-family: "DM Mono", monospace;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 400;
+  letter-spacing: 0.06em;
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-family: "Syne", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #ffffff;
   white-space: nowrap;
+  letter-spacing: -0.025em;
 }
 
 .line {
   flex: 1;
   height: 1px;
-  background: var(--border-color);
-  max-width: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  max-width: 320px;
 }
 
 .content {
@@ -47,30 +66,32 @@
 .text {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
 .paragraph {
+  font-family: "Outfit", sans-serif;
   font-size: 1.0625rem;
-  color: var(--text-secondary);
-  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.47);
+  line-height: 1.9;
+  font-weight: 300;
 }
 
 .highlight {
-  color: var(--accent-primary);
+  color: rgba(255, 255, 255, 0.88);
   font-weight: 500;
 }
 
 .imageSection {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
 }
 
 .imageContainer {
   position: relative;
   width: 100%;
-  max-width: 350px;
+  max-width: 340px;
   aspect-ratio: 1;
   margin: 0 auto;
 }
@@ -79,15 +100,15 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   z-index: 2;
 }
 
 .profileImage img {
-  transition: transform 0.5s ease;
+  transition: transform 0.55s ease;
 }
 
 .imageContainer:hover .profileImage img {
@@ -100,67 +121,73 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-primary);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
 }
 
 .placeholderInitial {
-  font-size: 8rem;
+  font-family: "Syne", sans-serif;
+  font-size: 7rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.1);
+  letter-spacing: -0.05em;
 }
 
 .profileScene {
   width: 100%;
   height: 100%;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .imagePlaceholder {
   width: 100%;
   height: 100%;
-  border-radius: 16px;
-  background: var(--bg-tertiary);
-  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.09);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-tertiary);
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.18);
+  font-size: 0.9375rem;
+  font-family: "DM Mono", monospace;
   position: relative;
   z-index: 2;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .imagePlaceholder:hover {
-  border-color: var(--accent-primary);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .imageFrame {
   position: absolute;
-  inset: 15px -15px -15px 15px;
-  border: 2px solid var(--accent-primary);
-  border-radius: 16px;
+  inset: 12px -12px -12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
   z-index: 1;
   transition: all 0.3s ease;
 }
 
 .imageContainer:hover .imageFrame {
-  inset: 10px -10px -10px 10px;
+  inset: 8px -8px -8px 8px;
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
+/* Glass stats panel */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 24px;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 .statItem {
@@ -168,18 +195,44 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding: 22px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.25s ease;
+  position: relative;
+}
+
+/* Dividers between stat cells */
+.statItem + .statItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.statItem:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .statNumber {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--accent-primary);
+  font-family: "Syne", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
 .statLabel {
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
-  margin-top: 4px;
+  font-family: "DM Mono", monospace;
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.5;
 }
 
 @media (max-width: 968px) {
@@ -216,7 +269,7 @@
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .line {
@@ -231,17 +284,11 @@
     font-size: 1rem;
   }
 
-  .stats {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 16px;
-  }
-
   .statNumber {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .statLabel {
-    font-size: 0.75rem;
+    font-size: 0.5625rem;
   }
 }

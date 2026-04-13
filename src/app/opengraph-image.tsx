@@ -10,7 +10,7 @@ export default async function Image() {
     (
       <div
         style={{
-          background: "linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%)",
+          background: "#000000",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -21,16 +21,16 @@ export default async function Image() {
           overflow: "hidden",
         }}
       >
-        {/* Decorative circles */}
+        {/* Subtle white glow circles */}
         <div
           style={{
             position: "absolute",
-            top: "-80px",
-            right: "-80px",
-            width: "300px",
-            height: "300px",
+            top: "-100px",
+            right: "-100px",
+            width: "400px",
+            height: "400px",
             borderRadius: "50%",
-            background: "rgba(124, 124, 248, 0.08)",
+            background: "rgba(255, 255, 255, 0.04)",
             display: "flex",
           }}
         />
@@ -38,11 +38,11 @@ export default async function Image() {
           style={{
             position: "absolute",
             bottom: "-120px",
-            left: "-60px",
-            width: "400px",
-            height: "400px",
+            left: "-80px",
+            width: "450px",
+            height: "450px",
             borderRadius: "50%",
-            background: "rgba(124, 124, 248, 0.05)",
+            background: "rgba(255, 255, 255, 0.025)",
             display: "flex",
           }}
         />
@@ -59,20 +59,20 @@ export default async function Image() {
           <div
             style={{
               fontSize: "72px",
-              fontWeight: 700,
-              letterSpacing: "-0.02em",
+              fontWeight: 800,
+              letterSpacing: "-0.04em",
               display: "flex",
             }}
           >
             <span style={{ color: "#ffffff" }}>Gurusewak</span>
-            <span style={{ color: "#7c7cf8" }}>.in</span>
+            <span style={{ color: "rgba(255,255,255,0.3)" }}>.in</span>
           </div>
 
           <div
             style={{
               fontSize: "28px",
-              color: "rgba(255, 255, 255, 0.6)",
-              fontWeight: 400,
+              color: "rgba(255, 255, 255, 0.45)",
+              fontWeight: 300,
               display: "flex",
             }}
           >
@@ -82,10 +82,10 @@ export default async function Image() {
           {/* Accent line */}
           <div
             style={{
-              width: "80px",
-              height: "4px",
-              background: "linear-gradient(90deg, #7c7cf8, #a78bfa)",
-              borderRadius: "2px",
+              width: "60px",
+              height: "2px",
+              background: "rgba(255, 255, 255, 0.4)",
+              borderRadius: "1px",
               marginTop: "8px",
               display: "flex",
             }}

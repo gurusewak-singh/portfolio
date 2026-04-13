@@ -170,9 +170,9 @@ export default function About() {
                     ease: [0.25, 0.46, 0.45, 0.94],
                   }}
                   whileHover={{
-                    scale: 1.1,
-                    boxShadow: "0 20px 40px rgba(124, 124, 248, 0.2)",
-                    borderColor: "var(--accent-primary)",
+                    scale: 1.04,
+                    boxShadow: "0 16px 40px rgba(0, 0, 0, 0.6)",
+                    borderColor: "rgba(255, 255, 255, 0.15)",
                   }}
                   style={{ perspective: 800 }}
                   ref={stat.value.ref}
