@@ -1,69 +1,13 @@
 .skills {
-  padding: 120px 0;
-  background: var(--bg-secondary);
+  padding: var(--section-padding-y) 0;
+  background: #000;
   position: relative;
 }
 
-.skills::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-}
-
 .container {
-  max-width: 1200px;
+  max-width: var(--section-max-width);
   margin: 0 auto;
   padding: 0 24px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 16px;
-}
-
-.sectionNumber {
-  font-family: "DM Mono", monospace;
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.25);
-  font-weight: 400;
-  letter-spacing: 0.06em;
-}
-
-.title {
-  font-family: "Syne", sans-serif;
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: #ffffff;
-  white-space: nowrap;
-  letter-spacing: -0.025em;
-}
-
-.line {
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.05);
-  max-width: 320px;
-}
-
-.subtitle {
-  font-family: "Outfit", sans-serif;
-  font-size: 1.0625rem;
-  color: rgba(255, 255, 255, 0.4);
-  max-width: 580px;
-  margin-bottom: 32px;
-  font-weight: 300;
-  line-height: 1.75;
 }
 
 .categories {
@@ -110,22 +54,23 @@
 }
 
 .skillCard {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
+  box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
   border-radius: 12px;
   padding: 20px;
   animation: fadeIn 0.45s ease forwards;
   opacity: 0;
-  transition: all 0.25s ease;
+  transition: all var(--duration-base) var(--ease-out-smooth);
 }
 
 .skillCard:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-2px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+  background: var(--glass-elevated-bg);
+  border-color: var(--glass-elevated-border);
+  box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
+  transform: translateY(-3px);
 }
 
 @keyframes fadeIn {
@@ -194,23 +139,6 @@
 
   .container {
     padding: 0 16px;
-  }
-
-  .header {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .title {
-    font-size: 1.625rem;
-  }
-
-  .line {
-    display: none;
-  }
-
-  .subtitle {
-    font-size: 1rem;
   }
 
   .categories {
