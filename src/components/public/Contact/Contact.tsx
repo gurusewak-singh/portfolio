@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Contact.module.css";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import MagneticButton from "@/components/animations/MagneticButton";
+import SectionHeader from "@/components/public/SectionHeader";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -61,27 +62,12 @@ export default function Contact() {
   return (
     <section id="contact" className={styles.contact}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              05.
-            </motion.span>
-            <h2 className={styles.title}>Get In Touch</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
+        <SectionHeader
+          number="05"
+          label="Contact"
+          title="Let's build something"
+          subtitle="Have a project in mind? Send a message."
+        />
 
         <div className={styles.content}>
           <ScrollReveal variant="fadeLeft" delay={0.2}>
