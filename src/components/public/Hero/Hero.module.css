@@ -160,8 +160,6 @@
   height: 40px;
   border-radius: 10px;
   background: var(--glass-subtle-bg);
-  backdrop-filter: var(--glass-subtle-blur);
-  -webkit-backdrop-filter: var(--glass-subtle-blur);
   border: 1px solid var(--glass-subtle-border);
   color: rgba(255, 255, 255, 0.62);
   transition: all var(--duration-base) var(--ease-out-smooth);

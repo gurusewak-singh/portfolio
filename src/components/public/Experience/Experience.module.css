@@ -68,8 +68,6 @@
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.22);
   z-index: 1;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 1);
 }
 
@@ -108,8 +106,6 @@
 .timelineContent {
   background: var(--glass-panel-bg);
   border: 1px solid var(--glass-panel-border);
-  backdrop-filter: var(--glass-panel-blur);
-  -webkit-backdrop-filter: var(--glass-panel-blur);
   box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
   border-radius: 14px;
   padding: 24px 28px;
@@ -178,8 +174,6 @@
   padding: 4px 10px;
   background: var(--glass-subtle-bg);
   border: 1px solid var(--glass-subtle-border);
-  backdrop-filter: var(--glass-subtle-blur);
-  -webkit-backdrop-filter: var(--glass-subtle-blur);
   border-radius: 4px;
   letter-spacing: 0.16em;
   text-transform: uppercase;

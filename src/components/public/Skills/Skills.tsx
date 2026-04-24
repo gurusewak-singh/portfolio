@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./Skills.module.css";
-import TiltCard from "@/components/animations/TiltCard";
 import { AnimatedProgress } from "@/components/animations/AnimatedCounter";
 import SectionHeader from "@/components/public/SectionHeader";
 
@@ -99,22 +98,20 @@ export default function Skills() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <TiltCard tiltIntensity={8} glareOpacity={0.08} scale={1.03}>
-                <div className={styles.skillCard}>
-                  <div className={styles.skillHeader}>
-                    <span className={styles.skillName}>{skill.name}</span>
-                    <span className={styles.skillPercent}>
-                      {skill.proficiency}%
-                    </span>
-                  </div>
-                  <AnimatedProgress
-                    value={skill.proficiency}
-                    className={styles.progressBar}
-                    barClassName={styles.progress}
-                    duration={1 + index * 0.05}
-                  />
+              <div className={styles.skillCard}>
+                <div className={styles.skillHeader}>
+                  <span className={styles.skillName}>{skill.name}</span>
+                  <span className={styles.skillPercent}>
+                    {skill.proficiency}%
+                  </span>
                 </div>
-              </TiltCard>
+                <AnimatedProgress
+                  value={skill.proficiency}
+                  className={styles.progressBar}
+                  barClassName={styles.progress}
+                  duration={1 + index * 0.05}
+                />
+              </div>
             </motion.div>
           ))}
         </div>

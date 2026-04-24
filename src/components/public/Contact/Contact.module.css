@@ -59,14 +59,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.55);
   flex-shrink: 0;
-  transition: all 0.25s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
 .contactItem:hover .contactIcon {
@@ -108,13 +106,11 @@ a.contactValue:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.38);
-  transition: all 0.25s ease;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
 .socialLink:hover {
@@ -124,12 +120,10 @@ a.contactValue:hover {
   transform: translateY(-2px);
 }
 
-/* Glass form */
+/* Glass form — solid, no backdrop-filter (sits over pure black) */
 .form {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 18px;
   padding: 32px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -166,8 +160,6 @@ a.contactValue:hover {
   color: #ffffff;
   background: var(--glass-subtle-bg);
   border: 1px solid var(--glass-subtle-border);
-  backdrop-filter: var(--glass-subtle-blur);
-  -webkit-backdrop-filter: var(--glass-subtle-blur);
   border-radius: 10px;
   transition: all var(--duration-base) var(--ease-out-smooth);
   outline: none;

@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import styles from "./Projects.module.css";
-import TiltCard from "@/components/animations/TiltCard";
-import ScrollReveal from "@/components/animations/ScrollReveal";
 import SectionHeader from "@/components/public/SectionHeader";
 
 interface Project {
@@ -347,7 +345,6 @@ export default function Projects() {
                   }
                 }}
               >
-                <TiltCard tiltIntensity={10} glareOpacity={0.1} scale={1.02}>
                   <article className={styles.card}>
                     <div className={styles.cardHeader}>
                       <div className={styles.folderIcon}>
@@ -430,7 +427,6 @@ export default function Projects() {
                       </ul>
                     </div>
                   </article>
-                </TiltCard>
               </div>
             </motion.div>
           ))}

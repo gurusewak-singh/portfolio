@@ -35,20 +35,24 @@ body {
   --warning: rgba(255, 210, 100, 0.85);
 
   /* === Three-tier glass system === */
-  --glass-subtle-bg: rgba(255, 255, 255, 0.032);
-  --glass-subtle-border: rgba(255, 255, 255, 0.06);
-  --glass-subtle-blur: blur(10px);
+  /* Panel + subtle tiers sit over solid black — blur nothing to blur.
+     Keeping 'none' removes a full GPU composite layer per element. */
+  --glass-subtle-bg: rgba(255, 255, 255, 0.045);
+  --glass-subtle-border: rgba(255, 255, 255, 0.07);
+  --glass-subtle-blur: none;
 
-  --glass-panel-bg: rgba(255, 255, 255, 0.05);
+  --glass-panel-bg: rgba(255, 255, 255, 0.055);
   --glass-panel-border: rgba(255, 255, 255, 0.09);
-  --glass-panel-blur: blur(14px);
+  --glass-panel-blur: none;
   --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 24px 48px -12px rgba(0, 0, 0, 0.6);
 
+  /* Elevated tier (Header pill, About photo) keeps real blur — it's over
+     actual content and there are only a handful of these elements. */
   --glass-elevated-bg: rgba(255, 255, 255, 0.08);
   --glass-elevated-border: rgba(255, 255, 255, 0.14);
-  --glass-elevated-blur: blur(18px);
+  --glass-elevated-blur: blur(16px);
   --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 40px 80px -20px rgba(0, 0, 0, 0.75),
@@ -101,20 +105,24 @@ body {
   --error: rgba(255, 100, 100, 0.85);
   --warning: rgba(255, 210, 100, 0.85);
 
-  --glass-subtle-bg: rgba(255, 255, 255, 0.032);
-  --glass-subtle-border: rgba(255, 255, 255, 0.06);
-  --glass-subtle-blur: blur(10px);
+  /* Panel + subtle tiers sit over solid black — blur nothing to blur.
+     Keeping 'none' removes a full GPU composite layer per element. */
+  --glass-subtle-bg: rgba(255, 255, 255, 0.045);
+  --glass-subtle-border: rgba(255, 255, 255, 0.07);
+  --glass-subtle-blur: none;
 
-  --glass-panel-bg: rgba(255, 255, 255, 0.05);
+  --glass-panel-bg: rgba(255, 255, 255, 0.055);
   --glass-panel-border: rgba(255, 255, 255, 0.09);
-  --glass-panel-blur: blur(14px);
+  --glass-panel-blur: none;
   --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 24px 48px -12px rgba(0, 0, 0, 0.6);
 
+  /* Elevated tier (Header pill, About photo) keeps real blur — it's over
+     actual content and there are only a handful of these elements. */
   --glass-elevated-bg: rgba(255, 255, 255, 0.08);
   --glass-elevated-border: rgba(255, 255, 255, 0.14);
-  --glass-elevated-blur: blur(18px);
+  --glass-elevated-blur: blur(16px);
   --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 40px 80px -20px rgba(0, 0, 0, 0.75),
@@ -164,21 +172,7 @@ h6 {
   font-family: "Syne", sans-serif;
 }
 
-/* Show default cursor on mobile/touch devices */
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
-}
-
-/* Hide default cursor on desktop for custom cursor */
-@media (pointer: fine) {
-  *,
-  *::before,
-  *::after {
-    cursor: none !important;
-  }
-}
+/* Default system cursor everywhere — custom CursorTrailer removed for perf */
 
 code,
 pre,
@@ -296,8 +290,7 @@ main > section:not(:first-of-type) {
 /* Card — glassmorphism base */
 .card {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* backdrop-filter removed - over solid bg, was wasted GPU work */
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.07);
   padding: 24px;
@@ -325,8 +318,7 @@ main > section:not(:first-of-type) {
 /* Glass utility (legacy) */
 .glass {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* backdrop-filter removed - over solid bg, was wasted GPU work */
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
@@ -334,15 +326,11 @@ main > section:not(:first-of-type) {
 .glass-subtle {
   background: var(--glass-subtle-bg);
   border: 1px solid var(--glass-subtle-border);
-  backdrop-filter: var(--glass-subtle-blur);
-  -webkit-backdrop-filter: var(--glass-subtle-blur);
 }
 
 .glass-panel {
   background: var(--glass-panel-bg);
   border: 1px solid var(--glass-panel-border);
-  backdrop-filter: var(--glass-panel-blur);
-  -webkit-backdrop-filter: var(--glass-panel-blur);
   box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
 }
 
