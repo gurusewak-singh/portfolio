@@ -101,12 +101,20 @@ export function LoadingWrapper({ children }: { children: React.ReactNode }) {
       setProgress(10);
 
       const settingsKeys = ["hero_background", "hero_photo", "profile_image"];
-      const fetchPromises = settingsKeys.map((key) =>
-        fetch(`/api/settings?key=${key}`)
-          .then((res) => (res.ok ? res.json() : null))
-          .catch(() => null)
-      );
+      
+      // Add timeout to prevent indefinite hanging
+      const fetchWithTimeout = (key: string, timeoutMs = 5000) => {
+        return Promise.race([
+          fetch(`/api/settings?key=${key}`)
+            .then((res) => (res.ok ? res.json() : null))
+            .catch(() => null),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Fetch timeout")), timeoutMs)
+          ),
+        ]).catch(() => null);
+      };
 
+      const fetchPromises = settingsKeys.map((key) => fetchWithTimeout(key));
       const results = await Promise.all(fetchPromises);
       setProgress(30);
 
