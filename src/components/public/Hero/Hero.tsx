@@ -1,36 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { useTheme } from "@/context/ThemeContext";
-import { usePreloadedAssets } from "@/context/PreloadedAssetsContext";
 import styles from "./Hero.module.css";
-import FloatingElement from "@/components/animations/FloatingElement";
+import SplineHero from "@/components/public/SplineHero";
 import MagneticButton from "@/components/animations/MagneticButton";
 import ScrollReveal from "@/components/animations/ScrollReveal";
-
-// Dynamic import for 3D scene (client-side only)
-const Hero3DScene = dynamic(
-  () =>
-    import("@/components/3d/Scene3D").then((mod) => ({
-      default: mod.Hero3DScene,
-    })),
-  { ssr: false },
-);
 
 const roles = ["ML Engineer", "AI Enthusiast", "Problem Solver"];
 
 export default function Hero() {
-  const { theme } = useTheme();
-  const { heroBackground, heroPhoto } = usePreloadedAssets();
   const [currentRole, setCurrentRole] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-
-  // Always dark overlay
-  const overlayColor = "rgba(0,0,0,0.75)";
 
   useEffect(() => {
     const currentText = roles[currentRole];
@@ -59,37 +41,14 @@ export default function Hero() {
 
   return (
     <section className={styles.hero}>
-      {/* Background image layer */}
-      {heroBackground && (
-        <div
-          className={styles.heroBackgroundImage}
-          style={{
-            backgroundImage: `url(${heroBackground})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-      )}
-
-      {/* Overlay on top of background image */}
-      {heroBackground && (
-        <div
-          className={styles.heroOverlay}
-          style={{ backgroundColor: overlayColor }}
-        />
-      )}
-
-      <div className={styles.background}>
-        {/* 3D Scene Background (grid pattern) */}
-        <Hero3DScene />
-      </div>
+      <SplineHero />
 
       <div className={styles.container}>
-        <ScrollReveal variant="fadeLeft" delay={0.2} className={styles.content}>
+        <ScrollReveal variant="fadeUp" delay={0.2} className={styles.content}>
           <motion.p
             className={styles.greeting}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             Hello, I&apos;m
@@ -97,14 +56,13 @@ export default function Hero() {
 
           <motion.h1
             className={styles.name}
-            initial={{ opacity: 0, y: 30, rotateX: 20 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.8,
+              duration: 0.9,
               delay: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94],
+              ease: [0.19, 1, 0.22, 1],
             }}
-            style={{ transformPerspective: 1000 }}
           >
             Gurusewak
           </motion.h1>
@@ -148,15 +106,15 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1 }}
           >
-            <MagneticButton strength={0.4}>
+            <MagneticButton strength={0.25}>
               <motion.a
                 href="#projects"
                 className={styles.primaryBtn}
                 whileHover={{
-                  scale: 1.05,
+                  scale: 1.04,
                   boxShadow: "0 20px 40px rgba(255, 255, 255, 0.1)",
                 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.96 }}
               >
                 View My Work
                 <motion.svg
@@ -173,20 +131,19 @@ export default function Hero() {
                 </motion.svg>
               </motion.a>
             </MagneticButton>
-            <MagneticButton strength={0.3}>
+            <MagneticButton strength={0.2}>
               <motion.a
                 href="#contact"
                 className={styles.secondaryBtn}
-                whileHover={{
-                  scale: 1.05,
-                  borderColor: "var(--accent-primary)",
-                }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
               >
                 Get In Touch
               </motion.a>
             </MagneticButton>
           </motion.div>
+
+          <div className={styles.socialDivider} aria-hidden="true" />
 
           <motion.div
             className={styles.social}
@@ -211,22 +168,22 @@ export default function Hero() {
                 path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
               },
             ].map((social, index) => (
-              <MagneticButton key={social.label} strength={0.5}>
+              <MagneticButton key={social.label} strength={0.3}>
                 <motion.a
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.socialLink}
                   aria-label={social.label}
-                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.9 }}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.3 + index * 0.1 }}
+                  transition={{ delay: 1.3 + index * 0.08 }}
                 >
                   <svg
-                    width="22"
-                    height="22"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -237,56 +194,6 @@ export default function Hero() {
             ))}
           </motion.div>
         </ScrollReveal>
-
-        <motion.div
-          className={styles.imageWrapper}
-          initial={{ opacity: 0, scale: 0.8, rotateY: -20 }}
-          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          transition={{
-            duration: 1,
-            delay: 0.5,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
-          <FloatingElement duration={8} yOffset={15} rotateAmount={3}>
-            <motion.div
-              className={styles.imageContainer}
-              whileHover={{ scale: 1.05, rotateY: 10 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-            >
-              {heroPhoto ? (
-                <div className={styles.heroPhotoWrapper}>
-                  <Image
-                    src={heroPhoto}
-                    alt="Gurusewak - AI/ML Engineer"
-                    fill
-                    style={{ objectFit: "cover" }}
-                    priority
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    unoptimized={heroPhoto.startsWith("data:")}
-                  />
-                </div>
-              ) : (
-                <div className={styles.imagePlaceholder}>
-                  <span>Your Photo</span>
-                </div>
-              )}
-              <motion.div
-                className={styles.imageDecoration}
-                animate={{
-                  rotate: [0, 360],
-                  borderRadius: [
-                    "30% 70% 70% 30% / 30% 30% 70% 70%",
-                    "70% 30% 30% 70% / 70% 70% 30% 30%",
-                    "30% 70% 70% 30% / 30% 30% 70% 70%",
-                  ],
-                }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              />
-            </motion.div>
-          </FloatingElement>
-        </motion.div>
       </div>
 
       <motion.div
