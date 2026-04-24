@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePreloadedAssets } from "@/context/PreloadedAssetsContext";
 import styles from "./About.module.css";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import SectionHeader from "@/components/public/SectionHeader";
 
 // Profile Image with fallback - uses preloaded assets from context
 function ProfileImage() {
@@ -77,27 +78,7 @@ export default function About() {
   return (
     <section id="about" className={styles.about}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              01.
-            </motion.span>
-            <h2 className={styles.title}>About Me</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
+        <SectionHeader number="01" label="About" title="Who I am" />
 
         <div className={styles.content}>
           <div className={styles.text}>
