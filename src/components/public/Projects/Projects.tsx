@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import styles from "./Projects.module.css";
 import TiltCard from "@/components/animations/TiltCard";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import SectionHeader from "@/components/public/SectionHeader";
 
 interface Project {
   _id: string;
@@ -293,35 +294,12 @@ export default function Projects() {
   return (
     <section id="projects" className={styles.projects}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              02.
-            </motion.span>
-            <h2 className={styles.title}>Featured Projects</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal variant="fadeUp" delay={0.2}>
-          <p className={styles.subtitle}>
-            Here are some of my recent projects that showcase my skills in
-            machine learning and full-stack development.
-          </p>
-        </ScrollReveal>
+        <SectionHeader
+          number="02"
+          label="Work"
+          title="Featured Projects"
+          subtitle="Here are some of my recent projects that showcase my skills in machine learning and full-stack development."
+        />
 
         <motion.div
           className={styles.filters}
