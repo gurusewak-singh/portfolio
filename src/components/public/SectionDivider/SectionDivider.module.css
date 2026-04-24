@@ -1,0 +1,7 @@
+.divider {
+  width: 100%;
+  max-width: var(--section-max-width);
+  height: 1px;
+  margin: 0 auto;
+  background: var(--section-divider-bg);
+}
