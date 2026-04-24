@@ -33,6 +33,44 @@ body {
   --success: rgba(160, 255, 200, 0.85);
   --error: rgba(255, 100, 100, 0.85);
   --warning: rgba(255, 210, 100, 0.85);
+
+  /* === Three-tier glass system === */
+  --glass-subtle-bg: rgba(255, 255, 255, 0.028);
+  --glass-subtle-border: rgba(255, 255, 255, 0.06);
+  --glass-subtle-blur: blur(16px) saturate(150%);
+
+  --glass-panel-bg: rgba(255, 255, 255, 0.045);
+  --glass-panel-border: rgba(255, 255, 255, 0.09);
+  --glass-panel-blur: blur(32px) saturate(200%);
+  --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
+    0 24px 48px -12px rgba(0, 0, 0, 0.6);
+
+  --glass-elevated-bg: rgba(255, 255, 255, 0.07);
+  --glass-elevated-border: rgba(255, 255, 255, 0.14);
+  --glass-elevated-blur: blur(48px) saturate(200%);
+  --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
+    0 40px 80px -20px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  /* === Motion === */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 800ms;
+
+  /* === Rhythm === */
+  --section-padding-y: 160px;
+  --section-padding-y-mobile: 96px;
+  --section-max-width: 1200px;
+  --section-divider-bg: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
 }
 
 /* Always dark — both themes identical */
@@ -62,6 +100,41 @@ body {
   --success: rgba(160, 255, 200, 0.85);
   --error: rgba(255, 100, 100, 0.85);
   --warning: rgba(255, 210, 100, 0.85);
+
+  --glass-subtle-bg: rgba(255, 255, 255, 0.028);
+  --glass-subtle-border: rgba(255, 255, 255, 0.06);
+  --glass-subtle-blur: blur(16px) saturate(150%);
+
+  --glass-panel-bg: rgba(255, 255, 255, 0.045);
+  --glass-panel-border: rgba(255, 255, 255, 0.09);
+  --glass-panel-blur: blur(32px) saturate(200%);
+  --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
+    0 24px 48px -12px rgba(0, 0, 0, 0.6);
+
+  --glass-elevated-bg: rgba(255, 255, 255, 0.07);
+  --glass-elevated-border: rgba(255, 255, 255, 0.14);
+  --glass-elevated-blur: blur(48px) saturate(200%);
+  --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
+    0 40px 80px -20px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 800ms;
+
+  --section-padding-y: 160px;
+  --section-padding-y-mobile: 96px;
+  --section-max-width: 1200px;
+  --section-divider-bg: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
 }
 
 * {
@@ -154,7 +227,7 @@ img {
 
 /* Section */
 .section {
-  padding: 100px 0;
+  padding: var(--section-padding-y) 0;
 }
 
 .section-title {
@@ -242,12 +315,36 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-/* Glass utility */
+/* Glass utility (legacy) */
 .glass {
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Glass tiers — premium three-tier system */
+.glass-subtle {
+  background: var(--glass-subtle-bg);
+  border: 1px solid var(--glass-subtle-border);
+  backdrop-filter: var(--glass-subtle-blur);
+  -webkit-backdrop-filter: var(--glass-subtle-blur);
+}
+
+.glass-panel {
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
+  box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
+}
+
+.glass-elevated {
+  background: var(--glass-elevated-bg);
+  border: 1px solid var(--glass-elevated-border);
+  backdrop-filter: var(--glass-elevated-blur);
+  -webkit-backdrop-filter: var(--glass-elevated-blur);
+  box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
 }
 
 /* Animations */
@@ -449,7 +546,7 @@ img {
 /* Responsive */
 @media (max-width: 768px) {
   .section {
-    padding: 60px 0;
+    padding: var(--section-padding-y-mobile) 0;
   }
 
   .section-title {
