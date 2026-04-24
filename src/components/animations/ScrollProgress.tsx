@@ -20,11 +20,11 @@ export default function ScrollProgress() {
         top: 0,
         left: 0,
         right: 0,
-        height: 1,
-        background: "rgba(255, 255, 255, 0.6)",
-        mixBlendMode: "difference",
+        height: 2,
+        background: "rgba(255, 255, 255, 0.85)",
         zIndex: 9999,
         pointerEvents: "none",
+        willChange: "transform",
       }}
     />
   );

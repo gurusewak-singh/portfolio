@@ -35,20 +35,20 @@ body {
   --warning: rgba(255, 210, 100, 0.85);
 
   /* === Three-tier glass system === */
-  --glass-subtle-bg: rgba(255, 255, 255, 0.028);
+  --glass-subtle-bg: rgba(255, 255, 255, 0.032);
   --glass-subtle-border: rgba(255, 255, 255, 0.06);
-  --glass-subtle-blur: blur(16px) saturate(150%);
+  --glass-subtle-blur: blur(10px);
 
-  --glass-panel-bg: rgba(255, 255, 255, 0.045);
+  --glass-panel-bg: rgba(255, 255, 255, 0.05);
   --glass-panel-border: rgba(255, 255, 255, 0.09);
-  --glass-panel-blur: blur(32px) saturate(200%);
+  --glass-panel-blur: blur(14px);
   --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 24px 48px -12px rgba(0, 0, 0, 0.6);
 
-  --glass-elevated-bg: rgba(255, 255, 255, 0.07);
+  --glass-elevated-bg: rgba(255, 255, 255, 0.08);
   --glass-elevated-border: rgba(255, 255, 255, 0.14);
-  --glass-elevated-blur: blur(48px) saturate(200%);
+  --glass-elevated-blur: blur(18px);
   --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 40px 80px -20px rgba(0, 0, 0, 0.75),
@@ -101,20 +101,20 @@ body {
   --error: rgba(255, 100, 100, 0.85);
   --warning: rgba(255, 210, 100, 0.85);
 
-  --glass-subtle-bg: rgba(255, 255, 255, 0.028);
+  --glass-subtle-bg: rgba(255, 255, 255, 0.032);
   --glass-subtle-border: rgba(255, 255, 255, 0.06);
-  --glass-subtle-blur: blur(16px) saturate(150%);
+  --glass-subtle-blur: blur(10px);
 
-  --glass-panel-bg: rgba(255, 255, 255, 0.045);
+  --glass-panel-bg: rgba(255, 255, 255, 0.05);
   --glass-panel-border: rgba(255, 255, 255, 0.09);
-  --glass-panel-blur: blur(32px) saturate(200%);
+  --glass-panel-blur: blur(14px);
   --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 24px 48px -12px rgba(0, 0, 0, 0.6);
 
-  --glass-elevated-bg: rgba(255, 255, 255, 0.07);
+  --glass-elevated-bg: rgba(255, 255, 255, 0.08);
   --glass-elevated-border: rgba(255, 255, 255, 0.14);
-  --glass-elevated-blur: blur(48px) saturate(200%);
+  --glass-elevated-blur: blur(18px);
   --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 40px 80px -20px rgba(0, 0, 0, 0.75),
@@ -230,6 +230,13 @@ img {
   padding: var(--section-padding-y) 0;
 }
 
+/* Perf: let browser skip layout/paint on off-screen sections.
+   Applied to every <section> except the hero (which must render from the start). */
+main > section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
 .section-title {
   font-family: "Syne", sans-serif;
   font-size: 2.5rem;
@@ -275,8 +282,8 @@ img {
 
 .btn-secondary {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: var(--text-primary);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -289,8 +296,8 @@ img {
 /* Card — glassmorphism base */
 .card {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.07);
   padding: 24px;
@@ -318,8 +325,8 @@ img {
 /* Glass utility (legacy) */
 .glass {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import styles from "./SplineHero.module.css";
 
 const Spline = dynamic(() => import("@splinetool/react-spline"), {
@@ -13,16 +13,37 @@ const SCENE_URL =
   "https://prod.spline.design/uyjjdqlPYik3EmHd/scene.splinecode";
 
 export default function SplineHero() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [inView, setInView] = useState(true);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0]?.isIntersecting ?? false;
+        setInView(visible);
+        if (!visible) setLoaded(false);
+      },
+      { rootMargin: "200px 0px", threshold: 0 },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const shouldRender = inView && !failed;
 
   return (
-    <div className={styles.stage} aria-hidden="true">
+    <div ref={containerRef} className={styles.stage} aria-hidden="true">
       <div
         className={styles.skeleton}
-        style={{ opacity: loaded && !failed ? 0 : 1 }}
+        style={{ opacity: loaded && shouldRender ? 0 : 1 }}
       />
-      {!failed && (
+      {shouldRender && (
         <Suspense fallback={null}>
           <div
             className={styles.sceneWrap}
