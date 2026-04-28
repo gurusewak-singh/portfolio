@@ -9,21 +9,21 @@ interface CursorTrailerProps {
   size?: number;
 }
 
-// Theme-aware cursor colors
+// Monochrome cursor — always white
 const cursorColors = {
   light: {
-    ring: "rgba(124, 124, 248, 0.6)",
-    ringHover: "rgba(124, 124, 248, 0.8)",
-    ringBg: "rgba(124, 124, 248, 0.15)",
-    dot: "rgba(124, 124, 248, 0.9)",
-    glow: "rgba(124, 124, 248, 0.6)",
+    ring: "rgba(255, 255, 255, 0.45)",
+    ringHover: "rgba(255, 255, 255, 0.7)",
+    ringBg: "rgba(255, 255, 255, 0.06)",
+    dot: "rgba(255, 255, 255, 0.9)",
+    glow: "rgba(255, 255, 255, 0.4)",
   },
   dark: {
-    ring: "rgba(124, 124, 248, 0.5)",
-    ringHover: "rgba(124, 124, 248, 0.8)",
-    ringBg: "rgba(124, 124, 248, 0.1)",
+    ring: "rgba(255, 255, 255, 0.45)",
+    ringHover: "rgba(255, 255, 255, 0.7)",
+    ringBg: "rgba(255, 255, 255, 0.06)",
     dot: "rgba(255, 255, 255, 0.9)",
-    glow: "rgba(124, 124, 248, 0.8)",
+    glow: "rgba(255, 255, 255, 0.4)",
   },
 };
 

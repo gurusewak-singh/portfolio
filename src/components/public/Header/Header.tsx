@@ -5,20 +5,18 @@ import { useTheme } from "@/context/ThemeContext";
 import styles from "./Header.module.css";
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
-  { href: "#skills", label: "Skills" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/research", label: "Research" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState<string | null>(null);
-  const [resumeLoading, setResumeLoading] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -28,37 +26,10 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lazy-load resume only when user clicks the button
-  const handleResumeClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // If already fetched, let the default download behavior work
-    if (resumeUrl) return;
-
-    e.preventDefault();
-    if (resumeLoading) return;
-
-    setResumeLoading(true);
-    try {
-      const res = await fetch("/api/settings?key=resume_file");
-      const data = await res.json();
-      if (data.value) {
-        setResumeUrl(data.value);
-        // Trigger download after URL is ready
-        const link = document.createElement("a");
-        link.href = data.value;
-        link.download = "Gurusewak_Resume.pdf";
-        link.click();
-      }
-    } catch (error) {
-      console.error("Error fetching resume:", error);
-    } finally {
-      setResumeLoading(false);
-    }
-  };
-
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.container}>
-        <a href="#" className={styles.logo}>
+        <a href="/" className={styles.logo}>
           <span className={styles.logoText}>Gurusewak</span>
           <span className={styles.logoDot}>.in</span>
         </a>
@@ -114,12 +85,12 @@ export default function Header() {
           </button>
 
           <a
-            href={resumeUrl || "#"}
-            download={resumeUrl ? "Gurusewak_Resume.pdf" : undefined}
+            href="/api/resume"
+            target="_blank"
+            rel="noopener noreferrer"
             className={styles.resumeBtn}
-            onClick={handleResumeClick}
           >
-            {resumeLoading ? "Loading..." : "Resume"}
+            Resume
           </a>
 
           <button

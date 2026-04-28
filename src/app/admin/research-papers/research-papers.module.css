@@ -1,0 +1,278 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #000;
+}
+
+.main {
+  flex: 1;
+  /* Sidebar is position:fixed and 260px wide on desktop, 76px on
+     tablet, and a bottom tab bar on mobile. Offset main content
+     accordingly so the page doesn't slide behind the sidebar. */
+  margin-left: 260px;
+  padding: 48px 40px;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .main {
+    margin-left: 76px;
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .main {
+    margin-left: 0;
+    padding: 24px 16px 96px;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: "Syne", sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.addBtn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.addBtn:hover {
+  background: rgba(255, 255, 255, 0.88);
+  transform: translateY(-1px);
+}
+
+.formCard {
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
+  box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
+  border-radius: 14px;
+  padding: 28px;
+  margin-bottom: 32px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formGroup.full {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input,
+.textarea {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #fff;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: "Outfit", sans-serif;
+}
+
+.fileInput {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "DM Mono", monospace;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  grid-column: 1 / -1;
+}
+
+.saveBtn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+}
+
+.cancelBtn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.rowMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-family: "Syne", sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.rowSub {
+  font-family: "DM Mono", monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.06em;
+}
+
+.rowActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.8125rem;
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.actionBtn.danger {
+  color: rgba(255, 130, 130, 0.9);
+}
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Outfit", sans-serif;
+}
+
+@media (max-width: 1024px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .title {
+    font-size: 1.625rem;
+  }
+  .formCard {
+    padding: 22px;
+    border-radius: 12px;
+  }
+  .formActions {
+    flex-direction: column;
+  }
+  .saveBtn,
+  .cancelBtn {
+    width: 100%;
+    padding: 12px;
+  }
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .rowActions {
+    width: 100%;
+  }
+  .rowActions .actionBtn {
+    flex: 1;
+    text-align: center;
+  }
+  .rowTitle {
+    font-size: 1rem;
+  }
+}

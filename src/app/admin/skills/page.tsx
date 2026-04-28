@@ -2,9 +2,10 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./skills.module.css";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import CustomSelect from "@/components/admin/CustomSelect";
 
 interface Skill {
   _id: string;
@@ -29,6 +30,20 @@ export default function AdminSkills() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!showForm) return;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        formRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [showForm, editingId]);
   const [formData, setFormData] = useState({
     name: "",
     category: "ml",
@@ -144,7 +159,11 @@ export default function AdminSkills() {
         </header>
 
         {showForm && (
-          <div className={styles.formOverlay} onClick={() => resetForm()}>
+          <div
+            ref={formRef}
+            className={styles.formOverlay}
+            onClick={() => resetForm()}
+          >
             <form
               className={styles.form}
               onClick={(e) => e.stopPropagation()}
@@ -166,18 +185,16 @@ export default function AdminSkills() {
 
               <div className={styles.formGroup}>
                 <label>Category *</label>
-                <select
+                <CustomSelect
                   value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
+                  onChange={(value) =>
+                    setFormData({ ...formData, category: value })
                   }
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
+                  options={categories.map((c) => ({
+                    value: c.id,
+                    label: c.label,
+                  }))}
+                />
               </div>
 
               <div className={styles.formGroup}>

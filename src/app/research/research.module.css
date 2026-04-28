@@ -1,0 +1,266 @@
+.page {
+  background: #000;
+  min-height: 100vh;
+  position: relative;
+  padding: 140px 0 120px;
+}
+
+.container {
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.intro {
+  margin-bottom: 64px;
+  max-width: 720px;
+}
+
+.intro p {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.0625rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: "Outfit", sans-serif;
+  padding: 80px 0;
+}
+
+.card {
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
+  box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all var(--duration-base) var(--ease-out-smooth);
+}
+
+.card:hover {
+  background: var(--glass-elevated-bg);
+  border-color: var(--glass-elevated-border);
+  transform: translateY(-3px);
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.cardTitle {
+  font-family: "Syne", sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  flex: 1;
+  min-width: 0;
+}
+
+.year {
+  font-family: "DM Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  white-space: nowrap;
+}
+
+.authors {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+
+.abstract {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.75;
+  margin-bottom: 18px;
+  font-weight: 300;
+  /* Preserve newlines pasted by the admin without forcing a fixed width. */
+  white-space: pre-wrap;
+}
+
+.abstract strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.topics {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.topic {
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 4px 10px;
+  background: var(--glass-subtle-bg);
+  border: 1px solid var(--glass-subtle-border);
+  backdrop-filter: var(--glass-subtle-blur);
+  -webkit-backdrop-filter: var(--glass-subtle-blur);
+  border-radius: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all var(--duration-base) var(--ease-out-smooth);
+  letter-spacing: 0.01em;
+}
+
+.primary {
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+}
+
+.primary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.secondary {
+  background: var(--glass-elevated-bg);
+  border: 1px solid var(--glass-elevated-border);
+  backdrop-filter: var(--glass-elevated-blur);
+  -webkit-backdrop-filter: var(--glass-elevated-blur);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Tablet */
+@media (max-width: 968px) {
+  .page {
+    padding: 120px 0 100px;
+  }
+  .container {
+    padding: 0 20px;
+  }
+  .card {
+    padding: 26px;
+    border-radius: 14px;
+  }
+}
+
+/* Phone */
+@media (max-width: 640px) {
+  .page {
+    padding: 100px 0 80px;
+  }
+  .container {
+    padding: 0 16px;
+  }
+  .list {
+    gap: 14px;
+  }
+  .card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  .cardHead {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .cardTitle {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+  .year {
+    font-size: 0.625rem;
+  }
+  .authors {
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+  }
+  .abstract {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .topics {
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .topic {
+    font-size: 0.625rem;
+    padding: 3px 8px;
+    letter-spacing: 0.14em;
+  }
+  .actions {
+    gap: 8px;
+  }
+  .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 0.8125rem;
+  }
+  .empty {
+    padding: 60px 0;
+    font-size: 0.875rem;
+  }
+}
+
+/* Very small */
+@media (max-width: 380px) {
+  .container {
+    padding: 0 12px;
+  }
+  .card {
+    padding: 18px;
+  }
+  .cardTitle {
+    font-size: 1rem;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+  }
+}

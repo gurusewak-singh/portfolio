@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./Skills.module.css";
-import TiltCard from "@/components/animations/TiltCard";
-import ScrollReveal from "@/components/animations/ScrollReveal";
 import { AnimatedProgress } from "@/components/animations/AnimatedCounter";
+import SectionHeader from "@/components/public/SectionHeader";
 
 interface Skill {
   _id: string;
@@ -72,34 +71,12 @@ export default function Skills() {
   return (
     <section id="skills" className={styles.skills}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              04.
-            </motion.span>
-            <h2 className={styles.title}>Skills & Technologies</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal variant="fadeUp" delay={0.2}>
-          <p className={styles.subtitle}>
-            A comprehensive overview of my technical skills and the technologies
-            I work with.
-          </p>
-        </ScrollReveal>
+        <SectionHeader
+          number="04"
+          label="Skills"
+          title="What I work with"
+          subtitle="A comprehensive overview of my technical skills and the technologies I work with."
+        />
 
         <div className={styles.categories}>
           {categories.map((cat) => (
@@ -121,22 +98,20 @@ export default function Skills() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <TiltCard tiltIntensity={8} glareOpacity={0.08} scale={1.03}>
-                <div className={styles.skillCard}>
-                  <div className={styles.skillHeader}>
-                    <span className={styles.skillName}>{skill.name}</span>
-                    <span className={styles.skillPercent}>
-                      {skill.proficiency}%
-                    </span>
-                  </div>
-                  <AnimatedProgress
-                    value={skill.proficiency}
-                    className={styles.progressBar}
-                    barClassName={styles.progress}
-                    duration={1 + index * 0.05}
-                  />
+              <div className={styles.skillCard}>
+                <div className={styles.skillHeader}>
+                  <span className={styles.skillName}>{skill.name}</span>
+                  <span className={styles.skillPercent}>
+                    {skill.proficiency}%
+                  </span>
                 </div>
-              </TiltCard>
+                <AnimatedProgress
+                  value={skill.proficiency}
+                  className={styles.progressBar}
+                  barClassName={styles.progress}
+                  duration={1 + index * 0.05}
+                />
+              </div>
             </motion.div>
           ))}
         </div>

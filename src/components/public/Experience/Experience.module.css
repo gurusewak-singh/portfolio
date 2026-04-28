@@ -1,5 +1,7 @@
 .experience {
-  padding: 120px 0;
+  padding: var(--section-padding-y) 0;
+  background: #000;
+  position: relative;
 }
 
 .container {
@@ -8,63 +10,40 @@
   padding: 0 24px;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 48px;
-}
-
-.sectionNumber {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1rem;
-  color: var(--accent-primary);
-  font-weight: 500;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  white-space: nowrap;
-}
-
-.line {
-  flex: 1;
-  height: 1px;
-  background: var(--border-color);
-  max-width: 300px;
-}
-
 .timeline {
   position: relative;
-  padding-left: 32px;
+  padding-left: 36px;
+}
+
+/* Background track */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .timelineLine {
   position: absolute;
   left: 7px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: var(--accent-primary);
-  border-radius: 2px;
-}
-
-.timeline::before {
-  content: "";
-  position: absolute;
-  left: 7px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: var(--border-color);
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.05)
+  );
+  border-radius: 1px;
 }
 
 .timelineItem {
   position: relative;
-  margin-bottom: 40px;
-  animation: fadeInUp 0.6s ease forwards;
+  margin-bottom: 36px;
+  animation: fadeInUp 0.55s ease forwards;
   opacity: 0;
 }
 
@@ -81,29 +60,42 @@
 
 .timelineDot {
   position: absolute;
-  left: -32px;
-  top: 8px;
-  width: 16px;
-  height: 16px;
-  background: var(--accent-primary);
+  left: -36px;
+  top: 10px;
+  width: 15px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 50%;
-  border: 3px solid var(--bg-primary);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   z-index: 1;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 1);
 }
 
 .pulseDot {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: var(--accent-primary);
-  animation: pulse 2s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: pulseDot 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
 }
 
 @keyframes pulse {
   0%,
   100% {
     transform: scale(1);
-    opacity: 0.5;
+    opacity: 0.4;
   }
   50% {
     transform: scale(1.5);
@@ -112,51 +104,79 @@
 }
 
 .timelineContent {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 24px;
-  transition: all 0.3s ease;
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
+  box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
+  border-radius: 14px;
+  padding: 24px 28px;
+  transition: all var(--duration-base) var(--ease-out-smooth);
+  /* Lock every timeline item to the same height. Description below is
+     clamped if it overflows; admin should keep entries concise since
+     there is no expand interaction here (per request). */
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
 }
 
 .timelineContent:hover {
-  border-color: var(--accent-primary);
-  box-shadow: var(--card-hover-shadow);
+  background: var(--glass-elevated-bg);
+  border-color: var(--glass-elevated-border);
+  box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
+  transform: translateX(4px);
 }
 
 .timelineHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   gap: 16px;
 }
 
 .position {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-family: "Syne", sans-serif;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 4px;
+  letter-spacing: -0.015em;
 }
 
 .company {
-  font-size: 1rem;
-  color: var(--accent-primary);
-  font-weight: 500;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
 }
 
 .date {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
+  font-family: "DM Mono", monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.25);
   white-space: nowrap;
+  letter-spacing: 0.05em;
+  padding-top: 3px;
 }
 
 .description {
+  font-family: "Outfit", sans-serif;
   font-size: 0.9375rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.78;
   margin-bottom: 16px;
+  font-weight: 300;
+  flex: 1;
+  /* Preserve newlines pasted by the admin and clamp overflow at 4
+     lines so the timeline stays even-height. No click-to-expand for
+     experience entries (intentional). */
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .technologies {
@@ -166,12 +186,23 @@
 }
 
 .tech {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.8125rem;
-  color: var(--accent-primary);
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.52);
   padding: 4px 10px;
-  background: rgba(124, 124, 248, 0.1);
+  background: var(--glass-subtle-bg);
+  border: 1px solid var(--glass-subtle-border);
+  backdrop-filter: var(--glass-subtle-blur);
+  -webkit-backdrop-filter: var(--glass-subtle-blur);
   border-radius: 4px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: all var(--duration-fast) var(--ease-out-smooth);
+}
+
+.tech:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 @media (max-width: 768px) {
@@ -183,57 +214,54 @@
     padding: 0 16px;
   }
 
-  .header {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .title {
-    font-size: 1.5rem;
-  }
-
-  .line {
-    display: none;
-  }
-
   .timeline {
-    padding-left: 24px;
+    padding-left: 28px;
   }
 
   .timelineDot {
-    left: -24px;
+    left: -28px;
     width: 12px;
     height: 12px;
   }
 
   .timelineContent {
-    padding: 20px;
+    padding: 18px 20px;
+    /* On mobile the timeline already stacks vertically and there is
+       no grid alignment to enforce. Drop the desktop equal-height
+       constraint so descriptions can be read in full. */
+    min-height: 0;
   }
 
   .timelineHeader {
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
 
   .position {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
   }
 
   .company {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
   .date {
     order: -1;
-    font-size: 0.8125rem;
+    font-size: 0.6875rem;
   }
 
   .description {
     font-size: 0.875rem;
+    /* Show full description on mobile — there's no way to expand
+       individual roles, so we just let them breathe. */
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    display: block;
+    overflow: visible;
   }
 
   .tech {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     padding: 3px 8px;
   }
 }

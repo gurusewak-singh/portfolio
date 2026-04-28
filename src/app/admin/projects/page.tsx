@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./projects.module.css";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 
@@ -27,6 +27,23 @@ export default function AdminProjects() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
+
+  // Smoothly scroll the form into view whenever it opens. Two rAFs
+  // so the scroll happens AFTER React has painted the form, which
+  // keeps the scroll endpoint stable instead of overshooting.
+  useEffect(() => {
+    if (!showForm) return;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        formRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [showForm, editingId]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -171,7 +188,11 @@ export default function AdminProjects() {
         </header>
 
         {showForm && (
-          <div className={styles.formOverlay} onClick={() => resetForm()}>
+          <div
+            ref={formRef}
+            className={styles.formOverlay}
+            onClick={() => resetForm()}
+          >
             <form
               className={styles.form}
               onClick={(e) => e.stopPropagation()}

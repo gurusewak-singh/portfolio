@@ -80,10 +80,11 @@ export default function AdminDashboard() {
 
       <main className={styles.main}>
         <header className={styles.header}>
-          <div>
+          <div className={styles.headerLead}>
+            <span className={styles.eyebrow}>00 — Overview</span>
             <h1 className={styles.title}>Dashboard</h1>
             <p className={styles.welcome}>
-              Welcome back, {session.user?.name || "Admin"}!
+              Welcome back, {session.user?.name || "Admin"}.
             </p>
           </div>
           <Link href="/" target="_blank" className={styles.viewSiteBtn}>
@@ -108,8 +109,8 @@ export default function AdminDashboard() {
             <div
               className={styles.statIcon}
               style={{
-                background: "rgba(99, 102, 241, 0.1)",
-                color: "#6366f1",
+                background: "rgba(255, 255, 255, 0.06)",
+                color: "rgba(255, 255, 255, 0.9)",
               }}
             >
               <svg
@@ -133,8 +134,8 @@ export default function AdminDashboard() {
             <div
               className={styles.statIcon}
               style={{
-                background: "rgba(16, 185, 129, 0.1)",
-                color: "#10b981",
+                background: "rgba(255, 255, 255, 0.06)",
+                color: "rgba(255, 255, 255, 0.9)",
               }}
             >
               <svg
@@ -159,8 +160,8 @@ export default function AdminDashboard() {
             <div
               className={styles.statIcon}
               style={{
-                background: "rgba(245, 158, 11, 0.1)",
-                color: "#f59e0b",
+                background: "rgba(255, 255, 255, 0.06)",
+                color: "rgba(255, 255, 255, 0.9)",
               }}
             >
               <svg
@@ -184,8 +185,8 @@ export default function AdminDashboard() {
             <div
               className={styles.statIcon}
               style={{
-                background: "rgba(139, 92, 246, 0.1)",
-                color: "#8b5cf6",
+                background: "rgba(255, 255, 255, 0.06)",
+                color: "rgba(255, 255, 255, 0.9)",
               }}
             >
               <svg

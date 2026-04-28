@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import styles from "./Projects.module.css";
-import TiltCard from "@/components/animations/TiltCard";
-import ScrollReveal from "@/components/animations/ScrollReveal";
+import SectionHeader from "@/components/public/SectionHeader";
 
 interface Project {
   _id: string;
@@ -293,35 +292,12 @@ export default function Projects() {
   return (
     <section id="projects" className={styles.projects}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              02.
-            </motion.span>
-            <h2 className={styles.title}>Featured Projects</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal variant="fadeUp" delay={0.2}>
-          <p className={styles.subtitle}>
-            Here are some of my recent projects that showcase my skills in
-            machine learning and full-stack development.
-          </p>
-        </ScrollReveal>
+        <SectionHeader
+          number="02"
+          label="Work"
+          title="Featured Projects"
+          subtitle="Here are some of my recent projects that showcase my skills in machine learning and full-stack development."
+        />
 
         <motion.div
           className={styles.filters}
@@ -369,7 +345,6 @@ export default function Projects() {
                   }
                 }}
               >
-                <TiltCard tiltIntensity={10} glareOpacity={0.1} scale={1.02}>
                   <article className={styles.card}>
                     <div className={styles.cardHeader}>
                       <div className={styles.folderIcon}>
@@ -429,15 +404,17 @@ export default function Projects() {
                     </div>
 
                     <h3 className={styles.cardTitle}>{project.title}</h3>
-                    <p className={styles.cardDescription}>
-                      {project.description}
-                    </p>
+                    <div className={styles.descriptionWrap}>
+                      <p className={styles.cardDescription}>
+                        {project.description}
+                      </p>
+                    </div>
 
                     <div className={styles.cardFooter}>
                       <ul className={styles.techList}>
                         {project.technologies
                           .slice(0, 4)
-                          .map((tech, techIndex) => (
+                          .map((tech) => (
                             <li key={tech} className={styles.techItem}>
                               {tech}
                             </li>
@@ -450,9 +427,21 @@ export default function Projects() {
                           </li>
                         )}
                       </ul>
+                      <span className={styles.readMore} aria-hidden="true">
+                        Read more
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </span>
                     </div>
                   </article>
-                </TiltCard>
               </div>
             </motion.div>
           ))}

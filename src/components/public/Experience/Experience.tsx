@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./Experience.module.css";
-import ScrollReveal from "@/components/animations/ScrollReveal";
+import SectionHeader from "@/components/public/SectionHeader";
 
 interface Experience {
   _id: string;
@@ -90,27 +90,11 @@ export default function Experience() {
   return (
     <section id="experience" className={styles.experience}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              03.
-            </motion.span>
-            <h2 className={styles.title}>Work Experience</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
+        <SectionHeader
+          number="03"
+          label="Experience"
+          title="Where I've worked"
+        />
 
         <div className={styles.timeline}>
           {/* Animated timeline line */}
@@ -130,16 +114,14 @@ export default function Experience() {
               initial={{
                 opacity: 0,
                 x: index % 2 === 0 ? -50 : 50,
-                rotateY: index % 2 === 0 ? -10 : 10,
               }}
-              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{
                 duration: 0.6,
                 delay: index * 0.2,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              style={{ perspective: 1000 }}
             >
               <motion.div
                 className={styles.timelineDot}
@@ -174,7 +156,7 @@ export default function Experience() {
                 className={styles.timelineContent}
                 whileHover={{
                   scale: 1.02,
-                  boxShadow: "0 25px 50px -12px rgba(124, 124, 248, 0.25)",
+                  boxShadow: "0 20px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.12)",
                   borderColor: "var(--accent-primary)",
                 }}
                 transition={{ duration: 0.3 }}

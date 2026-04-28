@@ -9,6 +9,9 @@ import Experience from '@/components/public/Experience';
 import Skills from '@/components/public/Skills';
 import Contact from '@/components/public/Contact';
 import Footer from '@/components/public/Footer';
+import SectionDivider from '@/components/public/SectionDivider';
+import ResearchCallout from '@/components/public/ResearchCallout';
+import ScrollProgress from '@/components/animations/ScrollProgress';
 
 // Dynamic import for loading wrapper (client-side only with 3D)
 const LoadingWrapper = dynamic(
@@ -19,13 +22,20 @@ const LoadingWrapper = dynamic(
 export default function Home() {
   return (
     <LoadingWrapper>
+      <ScrollProgress />
       <Header />
       <main>
         <Hero />
         <About />
+        <SectionDivider />
         <Projects />
+        <SectionDivider />
         <Experience />
+        <SectionDivider />
         <Skills />
+        <SectionDivider />
+        <ResearchCallout />
+        <SectionDivider />
         <Contact />
       </main>
       <Footer />

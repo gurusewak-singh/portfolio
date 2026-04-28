@@ -4,46 +4,62 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 20px 0;
-  transition: all 0.3s ease;
-}
-
-.header.scrolled {
-  padding: 12px 0;
-  background: var(--navbar-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color);
+  padding: 22px 24px;
+  transition: all var(--duration-slow) var(--ease-out-expo);
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 0;
+  transition: all var(--duration-slow) var(--ease-out-expo);
+}
+
+.header.scrolled {
+  padding: 12px 24px;
+}
+
+.header.scrolled .container {
+  /* Match section content max-width so the pill aligns with the
+     sections below it instead of looking pinched. */
+  max-width: var(--section-max-width);
+  padding: 10px 24px;
+  border-radius: 999px;
+  /* Heavy navbar glass — section text behind the pill reads as a deep
+     frosted blur, not as legible letters bleeding through. */
+  background: rgba(10, 10, 10, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(64px) saturate(220%);
+  -webkit-backdrop-filter: blur(64px) saturate(220%);
+  box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
 }
 
 .logo {
   display: flex;
-  align-items: center;
-  font-size: 1.75rem;
+  align-items: baseline;
+  gap: 1px;
+  font-family: "Syne", sans-serif;
+  font-size: 1.375rem;
   font-weight: 700;
-  transition: transform 0.3s ease;
+  letter-spacing: -0.025em;
+  transition: opacity 0.25s ease;
 }
 
 .logo:hover {
-  transform: scale(1.05);
+  opacity: 0.65;
 }
 
 .logoText {
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .logoDot {
-  color: var(--accent-primary);
-  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 1.375rem;
 }
 
 .nav {
@@ -54,61 +70,69 @@
 .navList {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   list-style: none;
 }
 
 .navLink {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: all 0.3s ease;
   position: relative;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color var(--duration-base) var(--ease-out-smooth);
+  letter-spacing: 0.005em;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 1px;
+  background: #ffffff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-base) var(--ease-out-smooth);
 }
 
 .navLink:hover {
-  color: var(--text-primary);
-  background: var(--bg-tertiary);
+  color: #ffffff;
+}
+
+.navLink:hover::after {
+  transform: scaleX(1);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
+/* Theme toggle hidden — always dark */
 .themeToggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-}
-
-.themeToggle:hover {
-  background: var(--accent-primary);
-  color: white;
-  border-color: var(--accent-primary);
+  display: none;
 }
 
 .resumeBtn {
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 500;
-  background: var(--accent-primary);
-  color: white;
-  transition: all 0.3s ease;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #000000;
+  background: #ffffff;
+  transition: all 0.25s ease;
+  letter-spacing: 0.01em;
 }
 
 .resumeBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(124, 124, 248, 0.3);
+  background: rgba(255, 255, 255, 0.86);
+  transform: translateY(-1px);
 }
 
 .mobileMenuBtn {
@@ -125,8 +149,8 @@
   display: block;
   position: relative;
   width: 100%;
-  height: 2px;
-  background: var(--text-primary);
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.65);
   transition: all 0.3s ease;
 }
 
@@ -136,17 +160,17 @@
   position: absolute;
   left: 0;
   width: 100%;
-  height: 2px;
-  background: var(--text-primary);
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.65);
   transition: all 0.3s ease;
 }
 
 .hamburger::before {
-  top: -8px;
+  top: -7px;
 }
 
 .hamburger::after {
-  top: 8px;
+  top: 7px;
 }
 
 .hamburgerOpen {
@@ -156,11 +180,13 @@
 .hamburgerOpen::before {
   top: 0;
   transform: rotate(45deg);
+  background: #ffffff;
 }
 
 .hamburgerOpen::after {
   top: 0;
   transform: rotate(-45deg);
+  background: #ffffff;
 }
 
 @media (max-width: 768px) {
@@ -177,11 +203,7 @@
   }
 
   .logo {
-    font-size: 1.5rem;
-  }
-
-  .logoDot {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
   }
 
   .nav {
@@ -190,11 +212,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--bg-primary);
+    background: rgba(0, 0, 0, 0.97);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
     flex-direction: column;
     justify-content: center;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.45s cubic-bezier(0.77, 0, 0.18, 1);
     z-index: 999;
   }
 
@@ -204,12 +228,22 @@
 
   .navList {
     flex-direction: column;
-    gap: 16px;
+    gap: 4px;
   }
 
   .navLink {
-    font-size: 1.5rem;
-    padding: 12px 24px;
+    font-family: "Syne", sans-serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    padding: 10px 32px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: -0.02em;
+    border-radius: 0;
+  }
+
+  .navLink:hover {
+    color: #ffffff;
+    background: transparent;
   }
 
   .mobileMenuBtn {
@@ -219,16 +253,9 @@
     z-index: 1001;
   }
 
-  .themeToggle {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-  }
-
   .resumeBtn {
     padding: 8px 16px;
     font-size: 0.875rem;
-    border-radius: 8px;
   }
 
   .actions {

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Contact.module.css";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import MagneticButton from "@/components/animations/MagneticButton";
+import SectionHeader from "@/components/public/SectionHeader";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ export default function Contact() {
   const inputVariants = {
     focused: {
       scale: 1.02,
-      boxShadow: "0 10px 30px rgba(124, 124, 248, 0.15)",
+      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.5)",
       borderColor: "var(--accent-primary)",
     },
     unfocused: {
@@ -61,27 +62,12 @@ export default function Contact() {
   return (
     <section id="contact" className={styles.contact}>
       <div className={styles.container}>
-        <ScrollReveal variant="fadeUp">
-          <div className={styles.header}>
-            <motion.span
-              className={styles.sectionNumber}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              05.
-            </motion.span>
-            <h2 className={styles.title}>Get In Touch</h2>
-            <motion.div
-              className={styles.line}
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ transformOrigin: "left" }}
-            />
-          </div>
-        </ScrollReveal>
+        <SectionHeader
+          number="06"
+          label="Contact"
+          title="Let's build something"
+          subtitle="Have a project in mind? Send a message."
+        />
 
         <div className={styles.content}>
           <ScrollReveal variant="fadeLeft" delay={0.2}>
@@ -390,7 +376,7 @@ export default function Contact() {
                   disabled={status === "loading"}
                   whileHover={{
                     scale: 1.03,
-                    boxShadow: "0 20px 40px rgba(124, 124, 248, 0.4)",
+                    boxShadow: "0 12px 32px rgba(255, 255, 255, 0.12)",
                   }}
                   whileTap={{ scale: 0.97 }}
                   initial={{ opacity: 0, y: 20 }}
