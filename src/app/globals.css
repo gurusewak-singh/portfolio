@@ -224,12 +224,10 @@ img {
   padding: var(--section-padding-y) 0;
 }
 
-/* Perf: let browser skip layout/paint on off-screen sections.
-   Applied to every <section> except the hero (which must render from the start). */
-main > section:not(:first-of-type) {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 800px;
-}
+/* content-visibility: auto was tried here but removed — it forces full
+   layout + paint inline when a section scrolls into view, which causes
+   visible hitches mid-scroll. Constant-cost rendering scrolls smoother
+   than deferred-cost rendering for content like this. */
 
 .section-title {
   font-family: "Syne", sans-serif;

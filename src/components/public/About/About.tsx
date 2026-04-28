@@ -142,8 +142,8 @@ export default function About() {
                 <motion.div
                   key={index}
                   className={styles.statItem}
-                  initial={{ opacity: 0, y: 30, rotateX: 20 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{
                     duration: 0.5,
@@ -155,7 +155,6 @@ export default function About() {
                     boxShadow: "0 16px 40px rgba(0, 0, 0, 0.6)",
                     borderColor: "rgba(255, 255, 255, 0.15)",
                   }}
-                  style={{ perspective: 800 }}
                   ref={stat.value.ref}
                 >
                   <motion.span

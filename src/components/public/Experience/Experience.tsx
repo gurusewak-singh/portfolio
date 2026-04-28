@@ -114,16 +114,14 @@ export default function Experience() {
               initial={{
                 opacity: 0,
                 x: index % 2 === 0 ? -50 : 50,
-                rotateY: index % 2 === 0 ? -10 : 10,
               }}
-              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{
                 duration: 0.6,
                 delay: index * 0.2,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              style={{ perspective: 1000 }}
             >
               <motion.div
                 className={styles.timelineDot}
