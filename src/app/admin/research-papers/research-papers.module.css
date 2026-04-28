@@ -6,10 +6,29 @@
 
 .main {
   flex: 1;
-  padding: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+  /* Sidebar is position:fixed and 260px wide on desktop, 76px on
+     tablet, and a bottom tab bar on mobile. Offset main content
+     accordingly so the page doesn't slide behind the sidebar. */
+  margin-left: 260px;
+  padding: 48px 40px;
   width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .main {
+    margin-left: 76px;
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .main {
+    margin-left: 0;
+    padding: 24px 16px 96px;
+  }
 }
 
 .header {
@@ -210,4 +229,50 @@
   text-align: center;
   color: rgba(255, 255, 255, 0.5);
   font-family: "Outfit", sans-serif;
+}
+
+@media (max-width: 1024px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .title {
+    font-size: 1.625rem;
+  }
+  .formCard {
+    padding: 22px;
+    border-radius: 12px;
+  }
+  .formActions {
+    flex-direction: column;
+  }
+  .saveBtn,
+  .cancelBtn {
+    width: 100%;
+    padding: 12px;
+  }
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .rowActions {
+    width: 100%;
+  }
+  .rowActions .actionBtn {
+    flex: 1;
+    text-align: center;
+  }
+  .rowTitle {
+    font-size: 1rem;
+  }
 }
