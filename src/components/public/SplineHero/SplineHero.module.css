@@ -1,8 +1,11 @@
 /* Stage hosts the Spline scene as the Hero background.
-   See SplineHero.tsx for how pointer-events / touch-action are split.
-   The composite-layer hints (translate3d + will-change + contain) force the
-   browser to keep the canvas on its own GPU layer so scroll only composites
-   the existing texture rather than rasterising the WebGL output anew. */
+   - .stage gets pointer-events: none so clicks/scroll fall through to
+     content above; .sceneWrap re-enables pointer-events: auto so the
+     scene's robot can track the mouse.
+   - touch-action: pan-y keeps vertical scroll working on touch devices.
+   - No will-change / contain / translate3d hacks — those were stacking
+     unnecessary GPU compositor layers and made things worse. Browser's
+     default layer management is correct here. */
 .stage {
   position: absolute;
   inset: 0;
@@ -10,8 +13,6 @@
   overflow: hidden;
   background: #000;
   pointer-events: none;
-  isolation: isolate;
-  contain: layout paint style;
 }
 
 .skeleton {
@@ -34,18 +35,11 @@
   transition: opacity 800ms var(--ease-out-smooth);
   pointer-events: auto;
   touch-action: pan-y;
-  /* Pin to its own GPU compositor layer */
-  transform: translate3d(0, 0, 0);
-  will-change: opacity;
-  backface-visibility: hidden;
-  contain: layout paint style;
 }
 
 .sceneWrap :global(canvas) {
   pointer-events: auto;
   touch-action: pan-y;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
 .vignette {

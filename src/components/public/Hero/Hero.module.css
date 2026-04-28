@@ -9,12 +9,6 @@
   max-width: 100vw;
   background: #000;
   text-align: center;
-  /* Containment keeps Hero's paint budget isolated from the rest of the
-     page during scroll — the browser doesn't have to re-rasterise inside
-     when neighbouring sections change. */
-  isolation: isolate;
-  contain: layout paint style;
-  transform: translateZ(0);
 }
 
 .container {
