@@ -173,14 +173,94 @@
   color: #fff;
 }
 
-@media (max-width: 768px) {
+/* Tablet */
+@media (max-width: 968px) {
   .page {
-    padding: 110px 0 80px;
+    padding: 120px 0 100px;
+  }
+  .container {
+    padding: 0 20px;
   }
   .card {
-    padding: 24px;
+    padding: 26px;
+    border-radius: 14px;
+  }
+}
+
+/* Phone */
+@media (max-width: 640px) {
+  .page {
+    padding: 100px 0 80px;
+  }
+  .container {
+    padding: 0 16px;
+  }
+  .list {
+    gap: 14px;
+  }
+  .card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  .cardHead {
+    gap: 12px;
+    margin-bottom: 12px;
   }
   .cardTitle {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+  .year {
+    font-size: 0.625rem;
+  }
+  .authors {
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+  }
+  .abstract {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .topics {
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .topic {
+    font-size: 0.625rem;
+    padding: 3px 8px;
+    letter-spacing: 0.14em;
+  }
+  .actions {
+    gap: 8px;
+  }
+  .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 0.8125rem;
+  }
+  .empty {
+    padding: 60px 0;
+    font-size: 0.875rem;
+  }
+}
+
+/* Very small */
+@media (max-width: 380px) {
+  .container {
+    padding: 0 12px;
+  }
+  .card {
+    padding: 18px;
+  }
+  .cardTitle {
+    font-size: 1rem;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
   }
 }

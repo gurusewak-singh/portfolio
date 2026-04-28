@@ -63,17 +63,20 @@ export async function GET() {
       });
     }
 
-    // Case 2: Google Drive viewer link. Convert to direct content URL
-    // so the browser opens the PDF, not the Drive HTML page.
+    // Case 2: Google Drive link. Always redirect to the Drive
+    // /file/d/<ID>/view viewer URL — that is Drive's in-browser
+    // preview page. The /uc?export=view&id=<ID> variant serves a
+    // direct download for PDFs, which is the opposite of what we
+    // want here.
     const driveId = googleDriveFileId(value);
     if (driveId) {
       return NextResponse.redirect(
-        `https://drive.google.com/uc?export=view&id=${driveId}`,
+        `https://drive.google.com/file/d/${driveId}/view`,
         302,
       );
     }
 
-    // Case 3: any other URL — just redirect.
+    // Case 3: any other URL — just redirect to whatever the admin saved.
     if (/^https?:\/\//i.test(value)) {
       return NextResponse.redirect(value, 302);
     }

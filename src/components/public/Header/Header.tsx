@@ -29,7 +29,7 @@ export default function Header() {
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.container}>
-        <a href="#" className={styles.logo}>
+        <a href="/" className={styles.logo}>
           <span className={styles.logoText}>Gurusewak</span>
           <span className={styles.logoDot}>.in</span>
         </a>
