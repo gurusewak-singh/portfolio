@@ -75,11 +75,11 @@
   transition: all var(--duration-base) var(--ease-out-smooth);
   animation: fadeInUp 0.5s ease forwards;
   opacity: 0;
-  /* Lock every card in the grid to the same height regardless of how
-     long the description is. Content longer than the card is clamped
-     by .cardDescription below; clicking the card opens the modal with
-     the full text. */
-  height: 360px;
+  /* Lock every card in the grid to the same height. Content longer
+     than the description slot is masked with a soft fade and the
+     'Read more' affordance signals that clicking the card opens the
+     modal with the full text. */
+  height: 380px;
 }
 
 .card:hover {
@@ -150,27 +150,76 @@
   color: #ffffff;
 }
 
+/* Wrapper that owns the fixed slot for the description. Lets us apply a
+   linear-gradient mask without it being overridden by the inner element's
+   line-clamp implementation. */
+.descriptionWrap {
+  position: relative;
+  margin-bottom: 22px;
+  /* line-height (1.72) * font-size (0.9375rem ≈ 15px) * 4 lines ≈ 103px.
+     Hard-locked so every card in the grid reserves the same vertical slot
+     for description regardless of actual content length. */
+  height: calc(0.9375rem * 1.72 * 4);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 70%,
+    rgba(0, 0, 0, 0.25) 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 70%,
+    rgba(0, 0, 0, 0.25) 92%,
+    transparent 100%
+  );
+}
+
 .cardDescription {
   font-family: "Outfit", sans-serif;
   font-size: 0.9375rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.72;
-  flex: 1;
-  margin-bottom: 22px;
   font-weight: 300;
-  /* Preserve newlines pasted by the admin. Clamp at 4 lines so all
-     cards in the grid stay the same height; full text is shown in
-     the modal that opens on click. */
+  margin: 0;
+  /* Preserve newlines pasted by the admin. */
   white-space: pre-wrap;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
-  -webkit-box-orient: vertical;
+  /* Fill the wrapper exactly; let it overflow inside, the fade mask on
+     the wrapper softens the cutoff so it never looks abrupt. */
+  height: 100%;
   overflow: hidden;
 }
 
 .cardFooter {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.52);
+  transition: gap var(--duration-base) var(--ease-out-smooth),
+    color var(--duration-base) var(--ease-out-smooth);
+}
+
+.readMore svg {
+  transition: transform var(--duration-base) var(--ease-out-smooth);
+}
+
+.card:hover .readMore {
+  color: #ffffff;
+  gap: 10px;
+}
+
+.card:hover .readMore svg {
+  transform: translateX(2px);
 }
 
 .techList {
@@ -477,7 +526,13 @@
   .card {
     padding: 20px;
     border-radius: 12px;
-    height: 320px;
+    height: 340px;
+  }
+  .descriptionWrap {
+    height: calc(0.875rem * 1.72 * 4);
+  }
+  .cardDescription {
+    font-size: 0.875rem;
   }
 
   .filters {

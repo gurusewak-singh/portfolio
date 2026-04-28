@@ -404,15 +404,17 @@ export default function Projects() {
                     </div>
 
                     <h3 className={styles.cardTitle}>{project.title}</h3>
-                    <p className={styles.cardDescription}>
-                      {project.description}
-                    </p>
+                    <div className={styles.descriptionWrap}>
+                      <p className={styles.cardDescription}>
+                        {project.description}
+                      </p>
+                    </div>
 
                     <div className={styles.cardFooter}>
                       <ul className={styles.techList}>
                         {project.technologies
                           .slice(0, 4)
-                          .map((tech, techIndex) => (
+                          .map((tech) => (
                             <li key={tech} className={styles.techItem}>
                               {tech}
                             </li>
@@ -425,6 +427,19 @@ export default function Projects() {
                           </li>
                         )}
                       </ul>
+                      <span className={styles.readMore} aria-hidden="true">
+                        Read more
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </span>
                     </div>
                   </article>
               </div>
