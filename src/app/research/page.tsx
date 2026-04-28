@@ -7,6 +7,7 @@ import Footer from "@/components/public/Footer";
 import SectionHeader from "@/components/public/SectionHeader";
 import HeroBackground from "@/components/public/HeroBackground";
 import ScrollProgress from "@/components/animations/ScrollProgress";
+import { formatAbstract } from "@/lib/formatAbstract";
 import styles from "./research.module.css";
 
 const LoadingWrapper = dynamic(
@@ -73,7 +74,9 @@ export default function ResearchPage() {
                 {p.authors?.length > 0 && (
                   <p className={styles.authors}>{p.authors.join(", ")}</p>
                 )}
-                <p className={styles.abstract}>{p.abstract}</p>
+                <p className={styles.abstract}>
+                  {formatAbstract(p.abstract)}
+                </p>
                 {p.topics?.length > 0 && (
                   <ul className={styles.topics}>
                     {p.topics.map((t) => (

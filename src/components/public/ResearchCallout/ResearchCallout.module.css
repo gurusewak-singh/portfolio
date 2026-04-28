@@ -1,0 +1,152 @@
+.section {
+  padding: var(--section-padding-y) 0;
+  background: #000;
+  position: relative;
+}
+
+.container {
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.card {
+  margin-top: 32px;
+  background: var(--glass-elevated-bg);
+  border: 1px solid var(--glass-elevated-border);
+  backdrop-filter: var(--glass-elevated-blur);
+  -webkit-backdrop-filter: var(--glass-elevated-blur);
+  box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
+  border-radius: 18px;
+  padding: 40px 44px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.lead {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eyebrow {
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.headline {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0;
+}
+
+.copy {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #ffffff;
+  color: #000;
+  border-radius: 8px;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all var(--duration-base) var(--ease-out-smooth);
+}
+
+.primary:hover {
+  background: rgba(255, 255, 255, 0.92);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(255, 255, 255, 0.1);
+}
+
+.previewList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.previewItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all var(--duration-base) var(--ease-out-smooth);
+}
+
+.previewItem:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.previewIndex {
+  font-family: "DM Mono", monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.06em;
+}
+
+.previewTitle {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.previewYear {
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.previewEmpty {
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  font-family: "DM Mono", monospace;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+@media (max-width: 868px) {
+  .card {
+    grid-template-columns: 1fr;
+    padding: 32px 28px;
+    gap: 28px;
+  }
+}

@@ -63,7 +63,7 @@ export default function Contact() {
     <section id="contact" className={styles.contact}>
       <div className={styles.container}>
         <SectionHeader
-          number="05"
+          number="06"
           label="Contact"
           title="Let's build something"
           subtitle="Have a project in mind? Send a message."
