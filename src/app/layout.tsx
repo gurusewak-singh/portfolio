@@ -27,6 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Start the 1.3 MB Spline scene download as early as possible —
+            in parallel with HTML parse + React hydration, instead of
+            waiting for SplineHero to mount and trigger the fetch. */}
+        <link
+          rel="preload"
+          href="/scene.splinecode"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
