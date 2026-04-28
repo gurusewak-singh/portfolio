@@ -5,20 +5,18 @@ import { useTheme } from "@/context/ThemeContext";
 import styles from "./Header.module.css";
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
-  { href: "#skills", label: "Skills" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/research", label: "Research" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState<string | null>(null);
-  const [resumeLoading, setResumeLoading] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -27,39 +25,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Lazy-load resume only when user clicks the button.
-  // The DB stores the resume as a base64 data URI. Opening that
-  // directly with window.open dumps the raw data URI in the URL bar
-  // and can be blocked by browsers for large payloads. Convert it
-  // into a Blob first so we get a clean blob: URL.
-  const handleResumeClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (resumeUrl) return;
-    e.preventDefault();
-    if (resumeLoading) return;
-
-    setResumeLoading(true);
-    try {
-      const res = await fetch("/api/settings?key=resume_file");
-      const data = await res.json();
-      if (data.value) {
-        let openUrl = data.value as string;
-        if (typeof openUrl === "string" && openUrl.startsWith("data:")) {
-          // Decode the data URI into a Blob and mint an object URL.
-          const blob = await fetch(openUrl).then((r) => r.blob());
-          openUrl = URL.createObjectURL(
-            new Blob([blob], { type: "application/pdf" }),
-          );
-        }
-        setResumeUrl(openUrl);
-        window.open(openUrl, "_blank", "noopener,noreferrer");
-      }
-    } catch (error) {
-      console.error("Error fetching resume:", error);
-    } finally {
-      setResumeLoading(false);
-    }
-  };
 
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
@@ -120,13 +85,12 @@ export default function Header() {
           </button>
 
           <a
-            href={resumeUrl || "#"}
+            href="/api/resume"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.resumeBtn}
-            onClick={handleResumeClick}
           >
-            {resumeLoading ? "Loading..." : "Resume"}
+            Resume
           </a>
 
           <button

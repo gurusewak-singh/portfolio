@@ -24,8 +24,10 @@
 }
 
 .header.scrolled .container {
-  max-width: 880px;
-  padding: 10px 20px;
+  /* Match section content max-width so the pill aligns with the
+     sections below it instead of looking pinched. */
+  max-width: var(--section-max-width);
+  padding: 10px 24px;
   border-radius: 999px;
   /* Heavy navbar glass — section text behind the pill reads as a deep
      frosted blur, not as legible letters bleeding through. */
