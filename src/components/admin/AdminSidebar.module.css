@@ -274,12 +274,55 @@
     white-space: nowrap;
   }
 
-  /* Footer (Sign Out) hidden on mobile — that's why the user saw
-     a stray icon next to Dashboard. Keep this rule explicit and
-     also hide the inner button in case display: none on the parent
-     gets overridden by something. */
-  .sidebarFooter,
+  /* Sign Out lives at the right edge of the bottom bar as a regular
+     tab. Different visual: subtle danger tint to distinguish it from
+     navigation. */
+  .sidebarFooter {
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+  }
+
   .signOutBtn {
-    display: none !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 4px 6px;
+    min-width: 64px;
+    gap: 4px;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    color: rgba(255, 110, 110, 0.8);
+  }
+
+  .signOutBtn:hover {
+    background: var(--admin-danger-bg);
+    color: var(--admin-danger);
+    border-color: transparent;
+  }
+
+  .signOutBtn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .signOutBtn .navLabel {
+    display: block;
+    font-family: "DM Mono", monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

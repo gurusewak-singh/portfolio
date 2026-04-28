@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
@@ -52,6 +52,20 @@ export default function AdminResearchPapers() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormShape>(blankForm);
   const [uploading, setUploading] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (!showForm) return;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        formRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [showForm, editingId]);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/admin/login");
@@ -223,7 +237,11 @@ export default function AdminResearchPapers() {
         </div>
 
         {showForm && (
-          <form className={styles.formCard} onSubmit={onSubmit}>
+          <form
+            ref={formRef}
+            className={styles.formCard}
+            onSubmit={onSubmit}
+          >
             <div className={styles.formGrid}>
               <div className={`${styles.formGroup} ${styles.full}`}>
                 <label className={styles.label}>Title</label>
