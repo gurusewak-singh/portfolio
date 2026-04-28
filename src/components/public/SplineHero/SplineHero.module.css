@@ -1,10 +1,20 @@
+/* Stage hosts the Spline scene as the Hero background.
+   Layout note on z-index + pointer-events:
+   - .stage: pointer-events: none so clicks/scroll fall through to the
+     content above (Hero text, buttons).
+   - .sceneWrap: pointer-events: auto so Spline's canvas can receive
+     mousemove/touchmove and drive any in-scene interactivity (e.g. the
+     robot tracking the mouse pointer).
+   - touch-action: pan-y keeps vertical scrolling working on touch devices
+     even though the canvas captures pointer events.
+   - The vignette + skeleton are visual overlays that must not block input. */
 .stage {
   position: absolute;
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  pointer-events: none;
   background: #000;
+  pointer-events: none;
 }
 
 .skeleton {
@@ -25,10 +35,13 @@
   position: absolute;
   inset: 0;
   transition: opacity 800ms var(--ease-out-smooth);
+  pointer-events: auto;
+  touch-action: pan-y;
 }
 
 .sceneWrap :global(canvas) {
-  pointer-events: none !important;
+  pointer-events: auto;
+  touch-action: pan-y;
 }
 
 .vignette {

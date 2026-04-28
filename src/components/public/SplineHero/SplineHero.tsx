@@ -18,10 +18,13 @@ const MAX_DPR = 1.25;
 
 export default function SplineHero() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const appRef = useRef<Application | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [inView, setInView] = useState(true);
 
+  // Pause Spline's render loop when scrolled out of view, resume when back in.
+  // Keeps the scene mounted (preserves state, no re-download, no jitter on
+  // return scroll) while still saving GPU when off-screen.
   useEffect(() => {
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
@@ -29,8 +32,13 @@ export default function SplineHero() {
     const io = new IntersectionObserver(
       (entries) => {
         const visible = entries[0]?.isIntersecting ?? false;
-        setInView(visible);
-        if (!visible) setLoaded(false);
+        const app = appRef.current;
+        if (!app) return;
+        if (visible) {
+          if (app.isStopped) app.play();
+        } else {
+          if (!app.isStopped) app.stop();
+        }
       },
       { rootMargin: "200px 0px", threshold: 0 },
     );
@@ -39,31 +47,37 @@ export default function SplineHero() {
     return () => io.disconnect();
   }, []);
 
-  const shouldRender = inView && !failed;
-
   const handleLoad = (app: Application) => {
-    // Reach into the Spline runtime's internal renderer to cap DPR.
-    // Not a public API, but stable across Spline runtime versions — the
-    // runtime just wraps a Three.js WebGLRenderer exposed as `_renderer`.
+    appRef.current = app;
+
+    // Cap DPR by reaching into Spline's internal Three.js renderer.
+    // Not a public API but stable; falls back gracefully if Spline changes
+    // internals.
     try {
-      const renderer = (app as unknown as { _renderer?: { setPixelRatio?: (n: number) => void; getSize?: (t: { x: number; y: number }) => { x: number; y: number }; setSize?: (w: number, h: number, updateStyle?: boolean) => void } })._renderer;
+      const renderer = (
+        app as unknown as {
+          _renderer?: { setPixelRatio?: (n: number) => void };
+        }
+      )._renderer;
       if (renderer?.setPixelRatio) {
         const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
         renderer.setPixelRatio(dpr);
       }
     } catch {
-      /* best effort; if Spline changes internals, we just fall back to default */
+      /* best effort */
     }
+
     setLoaded(true);
   };
 
   return (
-    <div ref={containerRef} className={styles.stage} aria-hidden="true">
+    <div ref={containerRef} className={styles.stage}>
       <div
         className={styles.skeleton}
-        style={{ opacity: loaded && shouldRender ? 0 : 1 }}
+        style={{ opacity: loaded && !failed ? 0 : 1 }}
+        aria-hidden="true"
       />
-      {shouldRender && (
+      {!failed && (
         <Suspense fallback={null}>
           <div
             className={styles.sceneWrap}
@@ -80,7 +94,7 @@ export default function SplineHero() {
           </div>
         </Suspense>
       )}
-      <div className={styles.vignette} />
+      <div className={styles.vignette} aria-hidden="true" />
     </div>
   );
 }
