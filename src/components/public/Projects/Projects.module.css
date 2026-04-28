@@ -227,6 +227,12 @@
   flex-wrap: wrap;
   gap: 8px;
   list-style: none;
+  /* Reserve enough space for 2 rows of tag pills (a single pill is
+     ~24px tall + 8px row-gap = ~56px for two rows). All cards use the
+     same slot height for tags so the 'Read more' affordance below
+     always lands at the same y-position regardless of tag count. */
+  min-height: 56px;
+  align-content: flex-start;
 }
 
 .techItem {

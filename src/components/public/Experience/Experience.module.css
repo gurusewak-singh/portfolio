@@ -226,6 +226,10 @@
 
   .timelineContent {
     padding: 18px 20px;
+    /* On mobile the timeline already stacks vertically and there is
+       no grid alignment to enforce. Drop the desktop equal-height
+       constraint so descriptions can be read in full. */
+    min-height: 0;
   }
 
   .timelineHeader {
@@ -248,6 +252,12 @@
 
   .description {
     font-size: 0.875rem;
+    /* Show full description on mobile — there's no way to expand
+       individual roles, so we just let them breathe. */
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    display: block;
+    overflow: visible;
   }
 
   .tech {
