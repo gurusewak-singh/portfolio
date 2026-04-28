@@ -75,7 +75,11 @@
   transition: all var(--duration-base) var(--ease-out-smooth);
   animation: fadeInUp 0.5s ease forwards;
   opacity: 0;
-  height: 100%;
+  /* Lock every card in the grid to the same height regardless of how
+     long the description is. Content longer than the card is clamped
+     by .cardDescription below; clicking the card opens the modal with
+     the full text. */
+  height: 360px;
 }
 
 .card:hover {
@@ -149,11 +153,20 @@
 .cardDescription {
   font-family: "Outfit", sans-serif;
   font-size: 0.9375rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.45);
   line-height: 1.72;
   flex: 1;
   margin-bottom: 22px;
   font-weight: 300;
+  /* Preserve newlines pasted by the admin. Clamp at 4 lines so all
+     cards in the grid stay the same height; full text is shown in
+     the modal that opens on click. */
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .cardFooter {
@@ -333,10 +346,11 @@
 .modalDescription {
   font-family: "Outfit", sans-serif;
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.48);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.8;
   margin-bottom: 28px;
   font-weight: 300;
+  white-space: pre-wrap;
 }
 
 .modalTechSection {
@@ -463,6 +477,7 @@
   .card {
     padding: 20px;
     border-radius: 12px;
+    height: 320px;
   }
 
   .filters {

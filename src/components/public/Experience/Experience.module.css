@@ -112,6 +112,12 @@
   border-radius: 14px;
   padding: 24px 28px;
   transition: all var(--duration-base) var(--ease-out-smooth);
+  /* Lock every timeline item to the same height. Description below is
+     clamped if it overflows; admin should keep entries concise since
+     there is no expand interaction here (per request). */
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
 }
 
 .timelineContent:hover {
@@ -157,10 +163,20 @@
 .description {
   font-family: "Outfit", sans-serif;
   font-size: 0.9375rem;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.5);
   line-height: 1.78;
   margin-bottom: 16px;
   font-weight: 300;
+  flex: 1;
+  /* Preserve newlines pasted by the admin and clamp overflow at 4
+     lines so the timeline stays even-height. No click-to-expand for
+     experience entries (intentional). */
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .technologies {
