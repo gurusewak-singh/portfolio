@@ -29,12 +29,12 @@ export default function Header() {
   }, []);
 
   // Lazy-load resume only when user clicks the button.
-  // Opens the PDF in a new tab for in-browser preview rather than
-  // forcing a download.
+  // The DB stores the resume as a base64 data URI. Opening that
+  // directly with window.open dumps the raw data URI in the URL bar
+  // and can be blocked by browsers for large payloads. Convert it
+  // into a Blob first so we get a clean blob: URL.
   const handleResumeClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // If already fetched, let the default link behavior open it
     if (resumeUrl) return;
-
     e.preventDefault();
     if (resumeLoading) return;
 
@@ -43,10 +43,16 @@ export default function Header() {
       const res = await fetch("/api/settings?key=resume_file");
       const data = await res.json();
       if (data.value) {
-        setResumeUrl(data.value);
-        // Open the resume in a new tab so the browser previews it
-        // rather than forcing a download.
-        window.open(data.value, "_blank", "noopener,noreferrer");
+        let openUrl = data.value as string;
+        if (typeof openUrl === "string" && openUrl.startsWith("data:")) {
+          // Decode the data URI into a Blob and mint an object URL.
+          const blob = await fetch(openUrl).then((r) => r.blob());
+          openUrl = URL.createObjectURL(
+            new Blob([blob], { type: "application/pdf" }),
+          );
+        }
+        setResumeUrl(openUrl);
+        window.open(openUrl, "_blank", "noopener,noreferrer");
       }
     } catch (error) {
       console.error("Error fetching resume:", error);

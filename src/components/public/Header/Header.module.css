@@ -27,13 +27,12 @@
   max-width: 880px;
   padding: 10px 20px;
   border-radius: 999px;
-  /* Heavier opacity + stronger blur than the elevated tier so section
-     text behind the navbar reads as a soft frosted blur rather than
-     readable letters bleeding through. */
-  background: rgba(8, 8, 8, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  /* Heavy navbar glass — section text behind the pill reads as a deep
+     frosted blur, not as legible letters bleeding through. */
+  background: rgba(10, 10, 10, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(64px) saturate(220%);
+  -webkit-backdrop-filter: blur(64px) saturate(220%);
   box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
 }
 
