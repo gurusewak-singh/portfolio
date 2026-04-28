@@ -160,6 +160,8 @@ a.contactValue:hover {
   color: #ffffff;
   background: var(--glass-subtle-bg);
   border: 1px solid var(--glass-subtle-border);
+  backdrop-filter: var(--glass-subtle-blur);
+  -webkit-backdrop-filter: var(--glass-subtle-blur);
   border-radius: 10px;
   transition: all var(--duration-base) var(--ease-out-smooth);
   outline: none;

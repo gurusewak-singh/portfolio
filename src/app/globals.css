@@ -35,25 +35,23 @@ body {
   --warning: rgba(255, 210, 100, 0.85);
 
   /* === Three-tier glass system === */
-  /* Panel + subtle tiers sit over solid black — blur nothing to blur.
-     Keeping 'none' removes a full GPU composite layer per element. */
+  /* Strong three-tier glass system (Spline removed, GPU budget freed
+     so we can afford real backdrop-filter blur on every tier). */
   --glass-subtle-bg: rgba(255, 255, 255, 0.045);
-  --glass-subtle-border: rgba(255, 255, 255, 0.07);
-  --glass-subtle-blur: none;
+  --glass-subtle-border: rgba(255, 255, 255, 0.08);
+  --glass-subtle-blur: blur(14px) saturate(160%);
 
   --glass-panel-bg: rgba(255, 255, 255, 0.055);
-  --glass-panel-border: rgba(255, 255, 255, 0.09);
-  --glass-panel-blur: none;
-  --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-panel-border: rgba(255, 255, 255, 0.1);
+  --glass-panel-blur: blur(24px) saturate(180%);
+  --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 24px 48px -12px rgba(0, 0, 0, 0.6);
 
-  /* Elevated tier (Header pill, About photo) keeps real blur — it's over
-     actual content and there are only a handful of these elements. */
   --glass-elevated-bg: rgba(255, 255, 255, 0.08);
-  --glass-elevated-border: rgba(255, 255, 255, 0.14);
-  --glass-elevated-blur: blur(16px);
-  --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-elevated-border: rgba(255, 255, 255, 0.16);
+  --glass-elevated-blur: blur(36px) saturate(200%);
+  --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
   --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 40px 80px -20px rgba(0, 0, 0, 0.75),
     0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -105,25 +103,23 @@ body {
   --error: rgba(255, 100, 100, 0.85);
   --warning: rgba(255, 210, 100, 0.85);
 
-  /* Panel + subtle tiers sit over solid black — blur nothing to blur.
-     Keeping 'none' removes a full GPU composite layer per element. */
+  /* Strong three-tier glass system (Spline removed, GPU budget freed
+     so we can afford real backdrop-filter blur on every tier). */
   --glass-subtle-bg: rgba(255, 255, 255, 0.045);
-  --glass-subtle-border: rgba(255, 255, 255, 0.07);
-  --glass-subtle-blur: none;
+  --glass-subtle-border: rgba(255, 255, 255, 0.08);
+  --glass-subtle-blur: blur(14px) saturate(160%);
 
   --glass-panel-bg: rgba(255, 255, 255, 0.055);
-  --glass-panel-border: rgba(255, 255, 255, 0.09);
-  --glass-panel-blur: none;
-  --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-panel-border: rgba(255, 255, 255, 0.1);
+  --glass-panel-blur: blur(24px) saturate(180%);
+  --glass-panel-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --glass-panel-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 24px 48px -12px rgba(0, 0, 0, 0.6);
 
-  /* Elevated tier (Header pill, About photo) keeps real blur — it's over
-     actual content and there are only a handful of these elements. */
   --glass-elevated-bg: rgba(255, 255, 255, 0.08);
-  --glass-elevated-border: rgba(255, 255, 255, 0.14);
-  --glass-elevated-blur: blur(16px);
-  --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-elevated-border: rgba(255, 255, 255, 0.16);
+  --glass-elevated-blur: blur(36px) saturate(200%);
+  --glass-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
   --glass-elevated-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
     0 40px 80px -20px rgba(0, 0, 0, 0.75),
     0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -324,11 +320,15 @@ img {
 .glass-subtle {
   background: var(--glass-subtle-bg);
   border: 1px solid var(--glass-subtle-border);
+  backdrop-filter: var(--glass-subtle-blur);
+  -webkit-backdrop-filter: var(--glass-subtle-blur);
 }
 
 .glass-panel {
   background: var(--glass-panel-bg);
   border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
   box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
 }
 

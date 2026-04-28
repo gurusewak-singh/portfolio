@@ -28,9 +28,11 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lazy-load resume only when user clicks the button
+  // Lazy-load resume only when user clicks the button.
+  // Opens the PDF in a new tab for in-browser preview rather than
+  // forcing a download.
   const handleResumeClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // If already fetched, let the default download behavior work
+    // If already fetched, let the default link behavior open it
     if (resumeUrl) return;
 
     e.preventDefault();
@@ -42,11 +44,9 @@ export default function Header() {
       const data = await res.json();
       if (data.value) {
         setResumeUrl(data.value);
-        // Trigger download after URL is ready
-        const link = document.createElement("a");
-        link.href = data.value;
-        link.download = "Gurusewak_Resume.pdf";
-        link.click();
+        // Open the resume in a new tab so the browser previews it
+        // rather than forcing a download.
+        window.open(data.value, "_blank", "noopener,noreferrer");
       }
     } catch (error) {
       console.error("Error fetching resume:", error);
@@ -115,7 +115,8 @@ export default function Header() {
 
           <a
             href={resumeUrl || "#"}
-            download={resumeUrl ? "Gurusewak_Resume.pdf" : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
             className={styles.resumeBtn}
             onClick={handleResumeClick}
           >

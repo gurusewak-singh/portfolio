@@ -27,10 +27,13 @@
   max-width: 880px;
   padding: 10px 20px;
   border-radius: 999px;
-  background: var(--glass-elevated-bg);
-  border: 1px solid var(--glass-elevated-border);
-  backdrop-filter: var(--glass-elevated-blur);
-  -webkit-backdrop-filter: var(--glass-elevated-blur);
+  /* Heavier opacity + stronger blur than the elevated tier so section
+     text behind the navbar reads as a soft frosted blur rather than
+     readable letters bleeding through. */
+  background: rgba(8, 8, 8, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
   box-shadow: var(--glass-elevated-highlight), var(--glass-elevated-shadow);
 }
 

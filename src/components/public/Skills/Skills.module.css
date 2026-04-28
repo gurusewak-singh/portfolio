@@ -54,6 +54,8 @@
 .skillCard {
   background: var(--glass-panel-bg);
   border: 1px solid var(--glass-panel-border);
+  backdrop-filter: var(--glass-panel-blur);
+  -webkit-backdrop-filter: var(--glass-panel-blur);
   box-shadow: var(--glass-panel-highlight), var(--glass-panel-shadow);
   border-radius: 12px;
   padding: 20px;
