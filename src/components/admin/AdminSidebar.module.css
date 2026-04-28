@@ -212,9 +212,16 @@
     flex-direction: row;
     flex: 1;
     padding: 8px 6px;
+    /* Allow horizontal scroll so items keep a sensible width even
+       when there are 7+ tabs. justify-content can't be space-around
+       here — that recompresses items to the visible width and causes
+       the label overlap from user's screenshot. flex-start lets
+       items stay their own size and overflow horizontally. */
     overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start;
+    align-items: stretch;
     gap: 0;
-    justify-content: space-around;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     border: none;
@@ -228,9 +235,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 8px 6px;
+    padding: 8px 4px 6px;
     font-size: 0.625rem;
-    min-width: 56px;
+    /* Each tab gets a hard min-width and never shrinks. With ~64px
+       per tab and 7 tabs we use ~448px total — wider than a phone
+       viewport, so the user can swipe horizontally to see them all. */
+    min-width: 64px;
+    flex-shrink: 0;
     gap: 4px;
     border-radius: 8px;
     border: none;
@@ -244,18 +255,31 @@
   .navItem svg {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
   }
 
   .navLabel {
     display: block;
     font-family: "DM Mono", monospace;
-    font-size: 0.5625rem;
-    letter-spacing: 0.1em;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     line-height: 1.2;
+    /* Label is constrained to the tab width and ellipsises if it
+       exceeds — better than overflowing onto the next tab. */
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .sidebarFooter {
-    display: none;
+  /* Footer (Sign Out) hidden on mobile — that's why the user saw
+     a stray icon next to Dashboard. Keep this rule explicit and
+     also hide the inner button in case display: none on the parent
+     gets overridden by something. */
+  .sidebarFooter,
+  .signOutBtn {
+    display: none !important;
   }
 }
