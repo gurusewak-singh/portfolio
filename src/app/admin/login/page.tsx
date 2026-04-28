@@ -45,8 +45,9 @@ export default function AdminLogin() {
 
       <div className={styles.loginCard}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Admin Portal</h1>
-          <p className={styles.subtitle}>Sign in to manage your portfolio</p>
+          <span className={styles.eyebrow}>Admin · Portal</span>
+          <h1 className={styles.title}>Sign in</h1>
+          <p className={styles.subtitle}>Manage your portfolio content</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>

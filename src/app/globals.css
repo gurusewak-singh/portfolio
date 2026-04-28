@@ -74,6 +74,14 @@ body {
     rgba(255, 255, 255, 0.08),
     transparent
   );
+
+  /* Admin accents — monochrome, override the legacy purple system. */
+  --accent-gradient: #ffffff;
+  --admin-focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  --admin-danger: rgba(255, 110, 110, 0.85);
+  --admin-danger-bg: rgba(255, 90, 90, 0.08);
+  --admin-success: rgba(160, 255, 200, 0.85);
+  --admin-success-bg: rgba(160, 255, 200, 0.06);
 }
 
 /* Always dark — both themes identical */
