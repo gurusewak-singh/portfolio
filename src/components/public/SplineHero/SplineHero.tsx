@@ -13,24 +13,25 @@ const Spline = dynamic(() => import("@splinetool/react-spline"), {
 const SCENE_URL =
   "https://prod.spline.design/uyjjdqlPYik3EmHd/scene.splinecode";
 
-// Cap device pixel ratio — retina runs fragment shaders at DPR^2 cost.
-const MAX_DPR = 1.25;
+// DPR strategy:
+// - When the hero is in (or near) view, render at the user's DPR capped at
+//   1.25. Anything above 1.25 is invisible to most eyes but quadratic in
+//   fragment-shader cost.
+// - When the hero is far off-screen, drop DPR to 0.5 so the canvas keeps
+//   running its render loop (preserves scene state, mouse interactivity,
+//   no resume jitter on scroll-back) but does ~10x less GPU work per
+//   frame — at 0.5 DPR the canvas renders quarter-resolution.
+// - We toggle to high DPR 1500px BEFORE the hero enters viewport, so the
+//   user never sees a low-res frame.
+const DPR_HIGH = 1.25;
+const DPR_LOW = 0.5;
+const PROXIMITY_ROOT_MARGIN = "1500px 0px";
 
-// Pre-play the scene 1500px before it enters viewport so the WebGL render
-// loop is already warm by the time the user scrolls to the hero. Stop only
-// when the hero is well off-screen (50px) so a quick scroll-up doesn't
-// thrash play/stop. This asymmetry is what makes the return scroll smooth.
-const PLAY_ROOT_MARGIN = "1500px 0px";
-const STOP_ROOT_MARGIN = "50px 0px";
-
-// Double-rAF: defer the play() call by two animation frames so it never
-// runs inside the same tick as the scroll handler that triggered it.
-function deferToIdleFrame(fn: () => void) {
-  if (typeof requestAnimationFrame === "undefined") {
-    fn();
-    return;
-  }
-  requestAnimationFrame(() => requestAnimationFrame(fn));
+interface RendererInternals {
+  setPixelRatio?: (n: number) => void;
+}
+interface AppInternals {
+  _renderer?: RendererInternals;
 }
 
 export default function SplineHero() {
@@ -39,64 +40,53 @@ export default function SplineHero() {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  // Apply a target DPR to Spline's internal Three.js renderer. Calling
+  // setPixelRatio resizes the WebGL drawing buffer and drops fragment
+  // workload accordingly. Re-runs setSize so the resize takes effect on
+  // the next frame.
+  const setQuality = (highQuality: boolean) => {
+    const app = appRef.current;
+    const stage = containerRef.current;
+    if (!app) return;
+    try {
+      const renderer = (app as unknown as AppInternals)._renderer;
+      if (renderer?.setPixelRatio) {
+        const target = highQuality
+          ? Math.min(window.devicePixelRatio || 1, DPR_HIGH)
+          : DPR_LOW;
+        renderer.setPixelRatio(target);
+      }
+      if (stage && typeof app.setSize === "function") {
+        app.setSize(stage.clientWidth, stage.clientHeight);
+      }
+    } catch {
+      /* best effort — Spline internals may shift, fall back silently */
+    }
+  };
+
   useEffect(() => {
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
 
-    const playObserver = new IntersectionObserver(
+    // Single observer with the wide proximity margin. Inside margin = high
+    // quality. Outside = low quality. No stop()/play() — render loop runs
+    // continuously, so there's no resume cost when scrolling back.
+    const io = new IntersectionObserver(
       (entries) => {
-        const visible = entries[0]?.isIntersecting ?? false;
-        const app = appRef.current;
-        if (!app || !visible) return;
-        if (app.isStopped) {
-          deferToIdleFrame(() => {
-            if (appRef.current?.isStopped) appRef.current.play();
-          });
-        }
+        const near = entries[0]?.isIntersecting ?? true;
+        setQuality(near);
       },
-      { rootMargin: PLAY_ROOT_MARGIN, threshold: 0 },
+      { rootMargin: PROXIMITY_ROOT_MARGIN, threshold: 0 },
     );
 
-    const stopObserver = new IntersectionObserver(
-      (entries) => {
-        const visible = entries[0]?.isIntersecting ?? false;
-        const app = appRef.current;
-        if (!app || visible) return;
-        if (!app.isStopped) {
-          deferToIdleFrame(() => {
-            if (appRef.current && !appRef.current.isStopped) {
-              appRef.current.stop();
-            }
-          });
-        }
-      },
-      { rootMargin: STOP_ROOT_MARGIN, threshold: 0 },
-    );
-
-    playObserver.observe(el);
-    stopObserver.observe(el);
-
-    return () => {
-      playObserver.disconnect();
-      stopObserver.disconnect();
-    };
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const handleLoad = (app: Application) => {
     appRef.current = app;
-    try {
-      const renderer = (
-        app as unknown as {
-          _renderer?: { setPixelRatio?: (n: number) => void };
-        }
-      )._renderer;
-      if (renderer?.setPixelRatio) {
-        const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
-        renderer.setPixelRatio(dpr);
-      }
-    } catch {
-      /* best effort */
-    }
+    // Apply initial high-DPR setting (capped).
+    setQuality(true);
     setLoaded(true);
   };
 
