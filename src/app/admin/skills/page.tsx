@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./skills.module.css";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import CustomSelect from "@/components/admin/CustomSelect";
 
 interface Skill {
   _id: string;
@@ -166,18 +167,16 @@ export default function AdminSkills() {
 
               <div className={styles.formGroup}>
                 <label>Category *</label>
-                <select
+                <CustomSelect
                   value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
+                  onChange={(value) =>
+                    setFormData({ ...formData, category: value })
                   }
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
+                  options={categories.map((c) => ({
+                    value: c.id,
+                    label: c.label,
+                  }))}
+                />
               </div>
 
               <div className={styles.formGroup}>

@@ -119,83 +119,12 @@
   gap: 18px;
 }
 
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.formGroup.full,
-.fullWidth {
-  grid-column: 1 / -1;
-}
-
 .label {
   font-family: "DM Mono", monospace;
   font-size: 0.6875rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
-}
-
-.input,
-.textarea {
-  background: var(--glass-subtle-bg);
-  border: 1px solid var(--glass-subtle-border);
-  backdrop-filter: var(--glass-subtle-blur);
-  -webkit-backdrop-filter: var(--glass-subtle-blur);
-  border-radius: 8px;
-  padding: 11px 14px;
-  color: #ffffff;
-  font-family: "Outfit", sans-serif;
-  font-size: 0.9375rem;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.input::placeholder,
-.textarea::placeholder {
-  color: rgba(255, 255, 255, 0.32);
-}
-
-.input:focus,
-.textarea:focus {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: var(--admin-focus-ring);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 100px;
-  line-height: 1.6;
-}
-
-.checkboxGroup {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-top: 26px;
-}
-
-.checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: #ffffff;
-  cursor: pointer;
-}
-
-.checkboxLabel {
-  font-family: "Outfit", sans-serif;
-  font-size: 0.9375rem;
-  color: rgba(255, 255, 255, 0.78);
-  cursor: pointer;
-}
-
-.formActions {
-  display: flex;
-  gap: 10px;
-  margin-top: 22px;
-  grid-column: 1 / -1;
 }
 
 .saveBtn {
@@ -401,16 +330,64 @@
 }
 
 .form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form > h2 {
+  font-family: "Syne", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+}
+
+.formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
 }
 
-.formRow {
-  grid-column: 1 / -1;
+.formGroup {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.formGroup label {
+  font-family: "DM Mono", monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9375rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 8px 0;
+}
+
+.checkbox input {
+  margin: 0;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .formOverlay {
