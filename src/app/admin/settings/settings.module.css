@@ -198,23 +198,40 @@
   gap: 10px;
 }
 
+/* .urlInput is a row wrapper around <input> + a Save button. Field
+   styling itself is handled by the global .admin-panel input rules
+   in globals.css so it matches every other admin input. */
 .urlInput {
-  background: var(--glass-subtle-bg);
-  border: 1px solid var(--glass-subtle-border);
-  backdrop-filter: var(--glass-subtle-blur);
-  -webkit-backdrop-filter: var(--glass-subtle-blur);
-  border-radius: 8px;
-  padding: 11px 14px;
-  color: #ffffff;
-  font-family: "Outfit", sans-serif;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
 }
 
-.urlInput:focus {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: var(--admin-focus-ring);
+.urlInput input {
+  flex: 1;
+  min-width: 0;
+}
+
+.urlInput button {
+  padding: 0 18px;
+  background: var(--glass-elevated-bg);
+  border: 1px solid var(--glass-elevated-border);
+  backdrop-filter: var(--glass-elevated-blur);
+  -webkit-backdrop-filter: var(--glass-elevated-blur);
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.urlInput button:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
 }
 
 .resumeSection {
