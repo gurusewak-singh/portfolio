@@ -13,8 +13,25 @@ const Spline = dynamic(() => import("@splinetool/react-spline"), {
 const SCENE_URL =
   "https://prod.spline.design/uyjjdqlPYik3EmHd/scene.splinecode";
 
-// Cap device pixel ratio — retina screens run fragment shaders at DPR^2 cost.
+// Cap device pixel ratio — retina runs fragment shaders at DPR^2 cost.
 const MAX_DPR = 1.25;
+
+// Pre-play the scene 1500px before it enters viewport so the WebGL render
+// loop is already warm by the time the user scrolls to the hero. Stop only
+// when the hero is well off-screen (50px) so a quick scroll-up doesn't
+// thrash play/stop. This asymmetry is what makes the return scroll smooth.
+const PLAY_ROOT_MARGIN = "1500px 0px";
+const STOP_ROOT_MARGIN = "50px 0px";
+
+// Double-rAF: defer the play() call by two animation frames so it never
+// runs inside the same tick as the scroll handler that triggered it.
+function deferToIdleFrame(fn: () => void) {
+  if (typeof requestAnimationFrame === "undefined") {
+    fn();
+    return;
+  }
+  requestAnimationFrame(() => requestAnimationFrame(fn));
+}
 
 export default function SplineHero() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -22,37 +39,51 @@ export default function SplineHero() {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
-  // Pause Spline's render loop when scrolled out of view, resume when back in.
-  // Keeps the scene mounted (preserves state, no re-download, no jitter on
-  // return scroll) while still saving GPU when off-screen.
   useEffect(() => {
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
 
-    const io = new IntersectionObserver(
+    const playObserver = new IntersectionObserver(
       (entries) => {
         const visible = entries[0]?.isIntersecting ?? false;
         const app = appRef.current;
-        if (!app) return;
-        if (visible) {
-          if (app.isStopped) app.play();
-        } else {
-          if (!app.isStopped) app.stop();
+        if (!app || !visible) return;
+        if (app.isStopped) {
+          deferToIdleFrame(() => {
+            if (appRef.current?.isStopped) appRef.current.play();
+          });
         }
       },
-      { rootMargin: "200px 0px", threshold: 0 },
+      { rootMargin: PLAY_ROOT_MARGIN, threshold: 0 },
     );
 
-    io.observe(el);
-    return () => io.disconnect();
+    const stopObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0]?.isIntersecting ?? false;
+        const app = appRef.current;
+        if (!app || visible) return;
+        if (!app.isStopped) {
+          deferToIdleFrame(() => {
+            if (appRef.current && !appRef.current.isStopped) {
+              appRef.current.stop();
+            }
+          });
+        }
+      },
+      { rootMargin: STOP_ROOT_MARGIN, threshold: 0 },
+    );
+
+    playObserver.observe(el);
+    stopObserver.observe(el);
+
+    return () => {
+      playObserver.disconnect();
+      stopObserver.disconnect();
+    };
   }, []);
 
   const handleLoad = (app: Application) => {
     appRef.current = app;
-
-    // Cap DPR by reaching into Spline's internal Three.js renderer.
-    // Not a public API but stable; falls back gracefully if Spline changes
-    // internals.
     try {
       const renderer = (
         app as unknown as {
@@ -66,7 +97,6 @@ export default function SplineHero() {
     } catch {
       /* best effort */
     }
-
     setLoaded(true);
   };
 

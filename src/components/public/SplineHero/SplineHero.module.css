@@ -1,13 +1,8 @@
 /* Stage hosts the Spline scene as the Hero background.
-   Layout note on z-index + pointer-events:
-   - .stage: pointer-events: none so clicks/scroll fall through to the
-     content above (Hero text, buttons).
-   - .sceneWrap: pointer-events: auto so Spline's canvas can receive
-     mousemove/touchmove and drive any in-scene interactivity (e.g. the
-     robot tracking the mouse pointer).
-   - touch-action: pan-y keeps vertical scrolling working on touch devices
-     even though the canvas captures pointer events.
-   - The vignette + skeleton are visual overlays that must not block input. */
+   See SplineHero.tsx for how pointer-events / touch-action are split.
+   The composite-layer hints (translate3d + will-change + contain) force the
+   browser to keep the canvas on its own GPU layer so scroll only composites
+   the existing texture rather than rasterising the WebGL output anew. */
 .stage {
   position: absolute;
   inset: 0;
@@ -15,6 +10,8 @@
   overflow: hidden;
   background: #000;
   pointer-events: none;
+  isolation: isolate;
+  contain: layout paint style;
 }
 
 .skeleton {
@@ -37,11 +34,18 @@
   transition: opacity 800ms var(--ease-out-smooth);
   pointer-events: auto;
   touch-action: pan-y;
+  /* Pin to its own GPU compositor layer */
+  transform: translate3d(0, 0, 0);
+  will-change: opacity;
+  backface-visibility: hidden;
+  contain: layout paint style;
 }
 
 .sceneWrap :global(canvas) {
   pointer-events: auto;
   touch-action: pan-y;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .vignette {

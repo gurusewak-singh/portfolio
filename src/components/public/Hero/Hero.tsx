@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./Hero.module.css";
 import SplineHero from "@/components/public/SplineHero";
@@ -10,11 +10,28 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 const roles = ["ML Engineer", "AI Enthusiast", "Problem Solver"];
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [currentRole, setCurrentRole] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  // Typing only runs when the hero is in view. Avoids React reconciles
+  // every 50-100ms while user is reading other sections, which costs
+  // frame budget during scroll-back.
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => setIsVisible(entries[0]?.isIntersecting ?? false),
+      { rootMargin: "100px 0px", threshold: 0 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
     const currentText = roles[currentRole];
     const timeout = setTimeout(
       () => {
@@ -37,10 +54,10 @@ export default function Hero() {
     );
 
     return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, currentRole]);
+  }, [displayText, isDeleting, currentRole, isVisible]);
 
   return (
-    <section className={styles.hero}>
+    <section ref={sectionRef} className={styles.hero}>
       <SplineHero />
 
       <div className={styles.container}>
