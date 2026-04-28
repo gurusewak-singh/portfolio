@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./Hero.module.css";
-import SplineHero from "@/components/public/SplineHero";
+import HeroBackground from "@/components/public/HeroBackground";
 import MagneticButton from "@/components/animations/MagneticButton";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
@@ -58,7 +58,7 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className={styles.hero}>
-      <SplineHero />
+      <HeroBackground />
 
       <div className={styles.container}>
         <ScrollReveal variant="fadeUp" delay={0.2} className={styles.content}>
