@@ -15,12 +15,18 @@ interface Message {
   createdAt: string;
 }
 
+type SendState = "idle" | "sending" | "sent" | "error";
+
 export default function AdminMessages() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [selected, setSelected] = useState<Message | null>(null);
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [replyBody, setReplyBody] = useState("");
+  const [sendState, setSendState] = useState<SendState>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/admin/login");
@@ -39,6 +45,42 @@ export default function AdminMessages() {
       console.error("Error:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const closeModal = () => {
+    setSelected(null);
+    setReplyOpen(false);
+    setReplyBody("");
+    setSendState("idle");
+    setErrorMessage("");
+  };
+
+  const sendReply = async () => {
+    if (!selected || !replyBody.trim()) return;
+    setSendState("sending");
+    setErrorMessage("");
+    try {
+      const res = await fetch(`/api/messages/${selected._id}/reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ body: replyBody.trim() }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setErrorMessage(data.error || "Failed to send reply");
+        setSendState("error");
+        return;
+      }
+      setSendState("sent");
+      // Auto-close after a short success state
+      setTimeout(() => {
+        closeModal();
+      }, 1400);
+    } catch (e) {
+      console.error("Send reply failed:", e);
+      setErrorMessage("Network error. Please try again.");
+      setSendState("error");
     }
   };
 
@@ -66,7 +108,7 @@ export default function AdminMessages() {
             <div
               key={msg._id}
               className={styles.card}
-              onClick={() => setSelectedMessage(msg)}
+              onClick={() => setSelected(msg)}
             >
               <div className={styles.cardHeader}>
                 <span className={styles.sender}>{msg.name}</span>
@@ -76,7 +118,8 @@ export default function AdminMessages() {
               </div>
               <div className={styles.subject}>{msg.subject}</div>
               <div className={styles.preview}>
-                {msg.message.substring(0, 100)}...
+                {msg.message.substring(0, 100)}
+                {msg.message.length > 100 ? "…" : ""}
               </div>
             </div>
           ))}
@@ -85,27 +128,113 @@ export default function AdminMessages() {
           )}
         </div>
 
-        {selectedMessage && (
-          <div
-            className={styles.modal}
-            onClick={() => setSelectedMessage(null)}
-          >
+        {selected && (
+          <div className={styles.modal} onClick={closeModal}>
             <div
               className={styles.modalContent}
               onClick={(e) => e.stopPropagation()}
             >
-              <h2>{selectedMessage.subject}</h2>
-              <p>
-                <strong>From:</strong> {selectedMessage.name} (
-                {selectedMessage.email})
-              </p>
-              <p className={styles.messageBody}>{selectedMessage.message}</p>
-              <a
-                href={`mailto:${selectedMessage.email}`}
-                className={styles.replyBtn}
+              <button
+                type="button"
+                className={styles.modalClose}
+                onClick={closeModal}
+                aria-label="Close"
               >
-                Reply
-              </a>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+
+              <h2 className={styles.modalTitle}>{selected.subject}</h2>
+              <p className={styles.modalFrom}>
+                <span className={styles.modalFromLabel}>From</span>
+                <span className={styles.modalFromValue}>
+                  {selected.name}{" "}
+                  <a
+                    href={`mailto:${selected.email}`}
+                    className={styles.modalFromEmail}
+                  >
+                    &lt;{selected.email}&gt;
+                  </a>
+                </span>
+              </p>
+              <p className={styles.messageBody}>{selected.message}</p>
+
+              {!replyOpen && (
+                <div className={styles.modalActions}>
+                  <button
+                    type="button"
+                    className={styles.replyBtn}
+                    onClick={() => setReplyOpen(true)}
+                  >
+                    Reply
+                  </button>
+                </div>
+              )}
+
+              {replyOpen && (
+                <div className={styles.replyPanel}>
+                  <label className={styles.replyLabel}>
+                    Your reply to {selected.name}
+                  </label>
+                  <textarea
+                    className={styles.replyTextarea}
+                    placeholder={`Hi ${selected.name},\n\n…`}
+                    value={replyBody}
+                    onChange={(e) => setReplyBody(e.target.value)}
+                    disabled={sendState === "sending" || sendState === "sent"}
+                    rows={6}
+                  />
+
+                  {sendState === "error" && errorMessage && (
+                    <div className={styles.replyError}>{errorMessage}</div>
+                  )}
+                  {sendState === "sent" && (
+                    <div className={styles.replySuccess}>
+                      Reply sent to {selected.email}
+                    </div>
+                  )}
+
+                  <div className={styles.replyActions}>
+                    <button
+                      type="button"
+                      className={styles.replyCancel}
+                      onClick={() => {
+                        setReplyOpen(false);
+                        setReplyBody("");
+                        setSendState("idle");
+                        setErrorMessage("");
+                      }}
+                      disabled={sendState === "sending"}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.replySend}
+                      onClick={sendReply}
+                      disabled={
+                        !replyBody.trim() ||
+                        sendState === "sending" ||
+                        sendState === "sent"
+                      }
+                    >
+                      {sendState === "sending"
+                        ? "Sending…"
+                        : sendState === "sent"
+                          ? "Sent ✓"
+                          : "Send reply"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
