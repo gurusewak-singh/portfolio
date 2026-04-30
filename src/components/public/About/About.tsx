@@ -8,17 +8,17 @@ import styles from "./About.module.css";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import SectionHeader from "@/components/public/SectionHeader";
 
-// Profile Image with fallback - uses preloaded assets from context
+// Profile Image with fallback. Two states:
+//   - profileImage hasn't loaded yet from /api/settings → subtle
+//     shimmer skeleton (much less jarring than a giant 'G').
+//   - profileImage failed (e.g. broken data URI) → the same skeleton.
+//   - profileImage is good → Next.js <Image> renders it.
 function ProfileImage() {
   const { profileImage } = usePreloadedAssets();
   const [imageError, setImageError] = useState(false);
 
   if (imageError || !profileImage) {
-    return (
-      <div className={styles.profilePlaceholder}>
-        <span className={styles.placeholderInitial}>G</span>
-      </div>
-    );
+    return <div className={styles.profilePlaceholder} aria-hidden="true" />;
   }
 
   return (

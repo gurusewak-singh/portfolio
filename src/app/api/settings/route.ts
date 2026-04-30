@@ -4,6 +4,16 @@ import SiteSettings from "@/models/SiteSettings";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+// Public-readable settings keys that should be cached at the edge.
+// Listed by name so we can't accidentally leak a sensitive future key
+// just because somebody fetches it without auth.
+const PUBLIC_CACHED_KEYS = new Set([
+  "profile_image",
+  "hero_background",
+  "hero_photo",
+  "resume_file",
+]);
+
 // GET - Fetch all settings or specific setting by key (public for resume access)
 export async function GET(request: Request) {
   try {
@@ -14,11 +24,21 @@ export async function GET(request: Request) {
 
     if (key) {
       const setting = await SiteSettings.findOne({ key });
-      if (!setting) {
-        // Return empty object instead of 404 for easier frontend handling
-        return NextResponse.json({ key, value: null });
+      const body =
+        setting ?? { key, value: null, type: null, label: null };
+
+      // Cache public asset keys at the edge for ~5 minutes and on the
+      // browser. Eliminates the cold-MongoDB roundtrip on repeat
+      // visits (which is what was causing the profile image to
+      // sometimes render as the 'G' fallback). 'stale-while-revalidate'
+      // keeps the page snappy even after the cache window expires.
+      const headers: Record<string, string> = {};
+      if (PUBLIC_CACHED_KEYS.has(key)) {
+        headers["Cache-Control"] =
+          "public, max-age=300, s-maxage=300, stale-while-revalidate=86400";
       }
-      return NextResponse.json(setting);
+
+      return NextResponse.json(body, { headers });
     }
 
     const settings = await SiteSettings.find({});
