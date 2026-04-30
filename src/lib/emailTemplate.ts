@@ -173,26 +173,26 @@ export function buildContactNotificationEmail({
         <td style="padding:18px 22px;">
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding:6px 0;font-family:${FONTS.mono};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.textMuted};width:90px;vertical-align:top;">
+              <td style="padding:9px 16px 9px 0;font-family:${FONTS.mono};font-size:11px;line-height:22px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.textMuted};width:88px;vertical-align:middle;">
                 Name
               </td>
-              <td style="padding:6px 0;font-family:${FONTS.body};font-size:15px;line-height:1.5;color:${COLORS.textPrimary};vertical-align:top;">
+              <td style="padding:9px 0;font-family:${FONTS.body};font-size:15px;line-height:22px;color:${COLORS.textPrimary};vertical-align:middle;">
                 ${safeName}
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;font-family:${FONTS.mono};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.textMuted};vertical-align:top;">
+              <td style="padding:9px 16px 9px 0;font-family:${FONTS.mono};font-size:11px;line-height:22px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.textMuted};vertical-align:middle;">
                 Email
               </td>
-              <td style="padding:6px 0;font-family:${FONTS.body};font-size:15px;line-height:1.5;vertical-align:top;">
+              <td style="padding:9px 0;font-family:${FONTS.body};font-size:15px;line-height:22px;vertical-align:middle;">
                 <a href="mailto:${safeEmail}" style="color:${COLORS.textPrimary};text-decoration:underline;text-decoration-color:${COLORS.textMuted};">${safeEmail}</a>
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;font-family:${FONTS.mono};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.textMuted};vertical-align:top;">
+              <td style="padding:9px 16px 9px 0;font-family:${FONTS.mono};font-size:11px;line-height:22px;letter-spacing:0.18em;text-transform:uppercase;color:${COLORS.textMuted};vertical-align:middle;">
                 Subject
               </td>
-              <td style="padding:6px 0;font-family:${FONTS.body};font-size:15px;line-height:1.5;color:${COLORS.textPrimary};vertical-align:top;">
+              <td style="padding:9px 0;font-family:${FONTS.body};font-size:15px;line-height:22px;color:${COLORS.textPrimary};vertical-align:middle;">
                 ${safeSubject}
               </td>
             </tr>

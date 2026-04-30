@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import nodemailer from "nodemailer";
 import dbConnect from "@/lib/mongodb";
 import Message from "@/models/Message";
@@ -26,41 +26,46 @@ export async function POST(request: Request) {
     await dbConnect();
     await Message.create({ name, email, subject, message });
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
+    // Defer the SMTP roundtrip until after the response has been
+    // sent. The visitor gets a 200 in ~50ms instead of waiting on
+    // the 2-3s SMTP handshake. If sendMail throws we log and move
+    // on — the message is already persisted in Mongo.
+    after(async () => {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST,
+          port: parseInt(process.env.SMTP_PORT || "587"),
+          secure: false,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD,
+          },
+        });
+
+        const html = buildContactNotificationEmail({
+          name,
+          email,
+          subject,
+          message,
+        });
+
+        const text =
+          `New message from ${name} (${email})\n\n` +
+          `Subject: ${subject}\n\n` +
+          `${message}\n\n--\nSent from gurusewak.in`;
+
+        await transporter.sendMail({
+          from: process.env.SMTP_USER,
+          to: process.env.CONTACT_EMAIL,
+          replyTo: email,
+          subject: `Portfolio Contact: ${subject}`,
+          text,
+          html,
+        });
+      } catch (emailError) {
+        console.error("Background contact email send failed:", emailError);
+      }
     });
-
-    const html = buildContactNotificationEmail({
-      name,
-      email,
-      subject,
-      message,
-    });
-
-    const text =
-      `New message from ${name} (${email})\n\n` +
-      `Subject: ${subject}\n\n` +
-      `${message}\n\n--\nSent from gurusewak.in`;
-
-    try {
-      await transporter.sendMail({
-        from: process.env.SMTP_USER,
-        to: process.env.CONTACT_EMAIL,
-        replyTo: email,
-        subject: `Portfolio Contact: ${subject}`,
-        text,
-        html,
-      });
-    } catch (emailError) {
-      console.error("Email sending failed:", emailError);
-      // Don't fail the request if email fails — message is still saved.
-    }
 
     return NextResponse.json(
       { message: "Message sent successfully" },
