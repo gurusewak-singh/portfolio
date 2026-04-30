@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import nodemailer from "nodemailer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -9,12 +9,12 @@ import { buildReplyEmail } from "@/lib/emailTemplate";
 /**
  * POST /api/messages/[id]/reply
  *
- * Sends an email reply to the original sender of the contact-form
- * message identified by `id`. Auth-gated (admin session required).
- *
- * Body shape:  { body: string }
- *   body — the admin's reply text (plain). Newlines preserved in the
- *          rendered email via white-space: pre-wrap.
+ * Sends an email reply to the original sender. Auth-gated.
+ * The actual SMTP send is deferred to next/server's after() so the
+ * admin gets an instant 'Sent ✓' state instead of waiting on the
+ * 2-3 second SMTP handshake. If the send fails, it's logged
+ * server-side; the original message is still in Mongo so nothing
+ * is lost.
  */
 export async function POST(
   request: Request,
@@ -45,52 +45,59 @@ export async function POST(
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
+    // Snapshot everything we need so the closure isn't holding the
+    // mongoose document past the response.
+    const trimmedBody = body.trim();
+    const recipientEmail = message.email;
+    const recipientName = message.name;
+    const originalSubject = message.subject ?? "";
+    const originalMessage = message.message ?? "";
+    const fromName = session.user?.name ?? "Gurusewak";
+
+    const replySubject = originalSubject.toLowerCase().startsWith("re:")
+      ? originalSubject
+      : `Re: ${originalSubject || "Your message"}`;
+
+    after(async () => {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST,
+          port: parseInt(process.env.SMTP_PORT || "587"),
+          secure: false,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD,
+          },
+        });
+
+        const html = buildReplyEmail({
+          toName: recipientName,
+          originalSubject,
+          originalMessage,
+          replyMessage: trimmedBody,
+          fromName,
+          portfolioUrl:
+            process.env.NEXT_PUBLIC_SITE_URL ?? "https://gurusewak.in",
+        });
+
+        const text =
+          `Hi ${recipientName},\n\n${trimmedBody}\n\nBest,\n${fromName}\n\n` +
+          `--\n` +
+          `In reply to: ${originalSubject}\n` +
+          `${originalMessage}\n`;
+
+        await transporter.sendMail({
+          from: process.env.SMTP_USER,
+          to: recipientEmail,
+          replyTo: process.env.CONTACT_EMAIL ?? process.env.SMTP_USER,
+          subject: replySubject,
+          text,
+          html,
+        });
+      } catch (mailErr) {
+        console.error("Background reply email send failed:", mailErr);
+      }
     });
-
-    const replySubject = message.subject?.toLowerCase().startsWith("re:")
-      ? message.subject
-      : `Re: ${message.subject ?? "Your message"}`;
-
-    const html = buildReplyEmail({
-      toName: message.name,
-      originalSubject: message.subject ?? "",
-      originalMessage: message.message ?? "",
-      replyMessage: body.trim(),
-      fromName: session.user?.name ?? "Gurusewak",
-      portfolioUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://gurusewak.in",
-    });
-
-    const text =
-      `Hi ${message.name},\n\n${body.trim()}\n\nBest,\n${session.user?.name ?? "Gurusewak"}\n\n` +
-      `--\n` +
-      `In reply to: ${message.subject ?? ""}\n` +
-      `${message.message ?? ""}\n`;
-
-    try {
-      await transporter.sendMail({
-        from: process.env.SMTP_USER,
-        to: message.email,
-        // Replies should land in the contact email, not the SMTP user.
-        replyTo: process.env.CONTACT_EMAIL ?? process.env.SMTP_USER,
-        subject: replySubject,
-        text,
-        html,
-      });
-    } catch (mailErr) {
-      console.error("Reply email send failed:", mailErr);
-      return NextResponse.json(
-        { error: "Failed to send reply email" },
-        { status: 502 },
-      );
-    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
