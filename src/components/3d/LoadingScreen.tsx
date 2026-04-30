@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   PreloadedAssetsProvider,
@@ -11,12 +11,18 @@ interface LoadingScreenProps {
   progress: number;
 }
 
+/**
+ * Branded loading intro — Syne wordmark + a thin progress bar that
+ * fills smoothly. Always animates on a fixed ~800ms timeline so the
+ * intro feels deliberate, not laggy. The page underneath has already
+ * rendered; the intro is just an overlay that fades out at the end.
+ */
 function LoadingScreen3D({ progress }: LoadingScreenProps) {
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
       style={{
         position: "fixed",
         inset: 0,
@@ -28,11 +34,10 @@ function LoadingScreen3D({ progress }: LoadingScreenProps) {
         justifyContent: "center",
       }}
     >
-      {/* Logo */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
           fontSize: "clamp(2rem, 6vw, 3.5rem)",
           fontWeight: 700,
@@ -45,11 +50,10 @@ function LoadingScreen3D({ progress }: LoadingScreenProps) {
         <span style={{ color: "rgba(255,255,255,0.3)" }}>.in</span>
       </motion.h1>
 
-      {/* Simple loading bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
+        transition={{ delay: 0.25, duration: 0.4 }}
         style={{
           marginTop: "2rem",
           width: "120px",
@@ -64,135 +68,102 @@ function LoadingScreen3D({ progress }: LoadingScreenProps) {
             height: "100%",
             background: "rgba(255, 255, 255, 0.7)",
             borderRadius: "1px",
+            width: `${progress}%`,
           }}
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.1, ease: "linear" }}
+          transition={{ duration: 0.05, ease: "linear" }}
         />
       </motion.div>
     </motion.div>
   );
 }
 
-// Preload a single image, returns the src on success or null on failure
-function preloadImage(src: string): Promise<string | null> {
-  return new Promise((resolve) => {
-    const img = new window.Image();
-    img.onload = () => resolve(src);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
+/**
+ * Loading wrapper.
+ *
+ * Asset preload (profile image) happens in the BACKGROUND from the
+ * moment the wrapper mounts. The intro screen runs on its OWN fixed
+ * timeline (~800ms ease-out animation, then 200ms exit fade) so the
+ * branded intro is consistent regardless of whether MongoDB Atlas
+ * is cold or warm. This is the difference between the old version
+ * (which blocked up to 5s waiting on Mongo) and this one.
+ *
+ * Children render INSIDE the wrapper from the start. By the time
+ * the loading overlay fades out, the page underneath is already
+ * fully painted. Profile image either arrives during the intro
+ * (typical case, since the API has a Cache-Control of 5min on
+ * profile_image), or it arrives a beat later and the About skeleton
+ * smoothly swaps in.
+ */
+const INTRO_DURATION_MS = 800;
+const INTRO_EXIT_MS = 200;
 
-// Wrapper component with loading state + real asset preloading
 export function LoadingWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [preloadedAssets, setPreloadedAssets] = useState<PreloadedAssets>({
+  const [assets, setAssets] = useState<PreloadedAssets>({
     heroBackground: null,
     heroPhoto: null,
     profileImage: null,
   });
 
-  const performPreload = useCallback(async () => {
-    try {
-      // Step 1: Fetch all image URLs from settings API (30% progress)
-      setProgress(10);
+  useEffect(() => {
+    let cancelled = false;
 
-      const settingsKeys = ["hero_background", "hero_photo", "profile_image"];
-      
-      // Add timeout to prevent indefinite hanging
-      const fetchWithTimeout = (key: string, timeoutMs = 5000) => {
-        return Promise.race([
-          fetch(`/api/settings?key=${key}`)
-            .then((res) => (res.ok ? res.json() : null))
-            .catch(() => null),
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Fetch timeout")), timeoutMs)
-          ),
-        ]).catch(() => null);
-      };
+    // Background preload of the only asset the public site actually
+    // uses (profile image). Cached at the edge so this is usually
+    // a sub-100ms fetch; even on a cold cache it does not block.
+    fetch("/api/settings?key=profile_image", { cache: "force-cache" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled) return;
+        if (data?.value) {
+          setAssets((a) => ({ ...a, profileImage: data.value as string }));
+        }
+      })
+      .catch(() => {
+        /* fall through silently — components handle null state */
+      });
 
-      const fetchPromises = settingsKeys.map((key) => fetchWithTimeout(key));
-      const results = await Promise.all(fetchPromises);
-      setProgress(30);
+    // Intro timeline — pure visual, doesn't wait on anything.
+    const start = performance.now();
+    let rafId = 0;
 
-      const heroBackgroundUrl = results[0]?.value || null;
-      const heroPhotoUrl = results[1]?.value || null;
-      const profileImageUrl = results[2]?.value || null;
-
-      // Step 2: Preload all images in parallel (30% -> 90%)
-      const imagesToPreload: { key: keyof PreloadedAssets; url: string | null }[] = [
-        { key: "heroBackground", url: heroBackgroundUrl },
-        { key: "heroPhoto", url: heroPhotoUrl },
-        { key: "profileImage", url: profileImageUrl },
-      ];
-
-      const validImages = imagesToPreload.filter((img) => img.url);
-      const totalImages = validImages.length;
-      let loadedCount = 0;
-
-      const assets: PreloadedAssets = {
-        heroBackground: heroBackgroundUrl,
-        heroPhoto: heroPhotoUrl,
-        profileImage: profileImageUrl,
-      };
-
-      if (totalImages > 0) {
-        const imagePromises = validImages.map(async (img) => {
-          // Only preload non-data URLs (data: URLs are already inline)
-          if (img.url && !img.url.startsWith("data:")) {
-            await preloadImage(img.url);
-          }
-          loadedCount++;
-          setProgress(30 + Math.round((loadedCount / totalImages) * 60));
-        });
-
-        await Promise.all(imagePromises);
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / INTRO_DURATION_MS, 1);
+      // ease-out-quad
+      const eased = 1 - Math.pow(1 - t, 2);
+      if (!cancelled) setProgress(Math.round(eased * 100));
+      if (t < 1) {
+        rafId = requestAnimationFrame(tick);
       } else {
-        setProgress(90);
+        // Tiny pause at 100% so the bar is briefly seen full,
+        // then fade the overlay out.
+        setTimeout(() => {
+          if (!cancelled) setIsLoading(false);
+        }, 120);
       }
+    };
 
-      setPreloadedAssets(assets);
-      setProgress(100);
+    rafId = requestAnimationFrame(tick);
 
-      // Small delay for smooth transition
-      await new Promise((resolve) => setTimeout(resolve, 400));
-    } catch {
-      // On error, still complete loading so site isn't stuck
-      console.log("Asset preloading had issues, continuing anyway");
-      setProgress(100);
-      await new Promise((resolve) => setTimeout(resolve, 400));
-    }
-
-    setIsLoading(false);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafId);
+    };
   }, []);
-
-  useEffect(() => {
-    requestAnimationFrame(() => setMounted(true));
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      performPreload();
-    }
-  }, [mounted, performPreload]);
-
-  // Skip rendering on server
-  if (!mounted) {
-    return null;
-  }
 
   return (
-    <PreloadedAssetsProvider value={preloadedAssets}>
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen3D progress={progress} />}
+    <PreloadedAssetsProvider value={assets}>
+      <AnimatePresence>
+        {isLoading && <LoadingScreen3D key="loading" progress={progress} />}
       </AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoading ? 0 : 1 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
+        transition={{
+          duration: INTRO_EXIT_MS / 1000,
+          ease: "easeOut",
+        }}
       >
         {children}
       </motion.div>
